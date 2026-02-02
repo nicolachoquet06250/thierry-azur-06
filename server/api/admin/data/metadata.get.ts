@@ -1,6 +1,6 @@
 import { metadata } from '~~/server/database/schema';
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   const db = useDb();
   
   let [record] = await db.select().from(metadata).limit(1);

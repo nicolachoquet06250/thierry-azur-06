@@ -1,6 +1,6 @@
 import { metadata } from '~~/server/database/schema';
 
-export default defineEventHandler(async (event): Promise<{
+export default defineEventHandler(async (): Promise<{
   phone: string,
   contactEmail: string,
   devisEmail: string,

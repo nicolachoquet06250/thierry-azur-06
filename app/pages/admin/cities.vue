@@ -316,19 +316,6 @@ onMounted(fetchCities);
   gap: 0.75rem;
 }
 
-.titleIcon {
-  background-color: #2563eb;
-  padding: 0.5rem;
-  color: #ffffff;
-  width: 50px;
-  min-width: 50px;
-  height: 50px;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .subtitle {
   color: #64748b;
   margin-top: 0.5rem;
@@ -415,21 +402,6 @@ onMounted(fetchCities);
   border-color: #bfdbfe;
 }
 
-.cardIndicator {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0.25rem;
-  height: 100%;
-  background-color: #2563eb;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.card:hover .cardIndicator {
-  opacity: 1;
-}
-
 .cardContent {
   display: flex;
   align-items: center;
@@ -510,38 +482,6 @@ onMounted(fetchCities);
   border-radius: 1rem;
   padding: 3rem;
   text-align: center;
-}
-
-.emptyIconWrapper {
-  background-color: var(--bg-main);
-  width: 4rem;
-  height: 4rem;
-  border-radius: 9999px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1rem;
-}
-
-.emptyIcon {
-  color: var(--text-main);
-  opacity: 0.3;
-}
-
-.emptyTitle {
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: var(--text-main);
-}
-
-.emptyDescription {
-  color: var(--text-main);
-  opacity: 0.6;
-  margin-top: 0.25rem;
-  max-width: 20rem;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .emptyAddButton {

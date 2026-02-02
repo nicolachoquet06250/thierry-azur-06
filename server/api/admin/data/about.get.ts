@@ -1,6 +1,6 @@
 import { about } from '~~/server/database/schema';
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   const db = useDb();
   
   let [record] = await db.select().from(about).limit(1);

@@ -1,12 +1,10 @@
-import { contacts } from '~~/server/database/schema';
-import { desc } from 'drizzle-orm';
+import {contacts} from '~~/server/database/schema';
+import {desc} from 'drizzle-orm';
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   const db = useDb();
-  
-  const results = await db.select()
-    .from(contacts)
-    .orderBy(desc(contacts.createdAt));
 
-  return results;
+  return db.select()
+      .from(contacts)
+      .orderBy(desc(contacts.createdAt));
 });

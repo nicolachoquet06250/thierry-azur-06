@@ -125,37 +125,6 @@ onUnmounted(() => {
   line-height: 1;
 }
 
-.brandName {
-  font-size: 1.5rem;
-  font-weight: 900;
-  letter-spacing: 0.05em;
-  color: white;
-  transition: color 0.3s ease;
-}
-
-.scrolled .brandName {
-  color: var(--primary);
-}
-
-.brandSub {
-  font-size: 0.875rem;
-  font-weight: 700;
-  margin-top: -2px;
-}
-
-.logoAzure {
-  color: #60a5fa;
-}
-
-.logoNumber {
-  color: white;
-  transition: color 0.3s ease;
-}
-
-.scrolled .logoNumber {
-  color: var(--primary);
-}
-
 .desktopNav {
   display: none;
   align-items: center;
@@ -252,13 +221,6 @@ onUnmounted(() => {
 
   .mobileMenuButton {
     display: none;
-  }
-}
-
-@media (max-width: 767px) {
-  .header:not(.scrolled) .brandName,
-  .header:not(.scrolled) .logoNumber {
-    color: white;
   }
 }
 </style>

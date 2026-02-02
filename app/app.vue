@@ -20,10 +20,3 @@ html, body {
   margin: 0;
 }
 </style>
-
-<style module>
-.appContainer {
-  min-height: 100vh;
-  background-color: var(--bg-main);
-}
-</style>

@@ -1,5 +1,5 @@
-import { devisAsks } from '~~/server/database/schema';
-import { desc, eq } from 'drizzle-orm';
+import {devisAsks} from '~~/server/database/schema';
+import {desc, eq} from 'drizzle-orm';
 
 export default defineEventHandler(async (event) => {
   const db = useDb();
@@ -14,7 +14,5 @@ export default defineEventHandler(async (event) => {
     baseQuery = baseQuery.where(eq(devisAsks.replied, isReplied));
   }
 
-  const results = await baseQuery.orderBy(desc(devisAsks.createdAt));
-
-  return results;
+  return await baseQuery.orderBy(desc(devisAsks.createdAt));
 });

@@ -1,7 +1,7 @@
 import { contacts, devisAsks } from '~~/server/database/schema';
 import { desc } from 'drizzle-orm';
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   const db = useDb();
   
   const [contactsResults, devisResults] = await Promise.all([

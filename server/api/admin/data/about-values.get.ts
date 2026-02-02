@@ -1,6 +1,6 @@
 import { aboutValues } from '~~/server/database/schema';
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   const db = useDb();
-  return await db.select().from(aboutValues);
+  return db.select().from(aboutValues);
 });

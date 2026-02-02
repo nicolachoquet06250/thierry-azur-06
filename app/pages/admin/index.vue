@@ -582,20 +582,6 @@ onMounted(() => {
   line-height: 1.625;
 }
 
-.decoration {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-}
-
-.dot {
-  height: 0.375rem;
-  width: 0.375rem;
-  border-radius: 9999px;
-  background-color: #e2e8f0;
-}
-
 .loadingState {
   padding: 3rem;
   text-align: center;

@@ -1,6 +1,6 @@
 import { about } from '~~/server/database/schema';
 
-export default defineEventHandler(async (event): Promise<{
+export default defineEventHandler(async (): Promise<{
   subtitle: string,
   historySectionTitle: string,
   historySectionContent: string,

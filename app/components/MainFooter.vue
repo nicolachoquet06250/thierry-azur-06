@@ -160,33 +160,6 @@ const formattedPhone = computed(() => {
   margin-bottom: 1.5rem;
 }
 
-.logoText {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.brandName {
-  font-size: 1.75rem;
-  font-weight: 900;
-  letter-spacing: 0.05em;
-  color: white;
-}
-
-.brandSub {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-top: -2px;
-}
-
-.logoAzure {
-  color: #60a5fa;
-}
-
-.logoNumber {
-  color: white;
-}
-
 .brandDesc {
   color: #94a3b8; /* Slate 400 */
   line-height: 1.6;
