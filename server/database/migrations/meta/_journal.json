@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1769989743681,
+      "tag": "0000_smart_hulk",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1769990363925,
+      "tag": "0001_slimy_thundra",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1769995682582,
+      "tag": "0002_wide_tana_nile",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1769999881809,
+      "tag": "0003_true_fallen_one",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1770002167861,
+      "tag": "0004_condemned_omega_sentinel",
+      "breakpoints": true
+    }
+  ]
+}

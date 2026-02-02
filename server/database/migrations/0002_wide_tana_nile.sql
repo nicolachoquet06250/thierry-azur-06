@@ -1,0 +1,1 @@
+ALTER TABLE `devis_asks` ADD `replied` boolean DEFAULT false NOT NULL;

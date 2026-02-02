@@ -1,0 +1,39 @@
+{
+  "name": "thierry-azure-06-2",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@vue-email/components": "^0.0.21",
+    "@vue-email/render": "^0.0.9",
+    "bcryptjs": "^3.0.3",
+    "drizzle-orm": "^0.45.1",
+    "jsonwebtoken": "^9.0.3",
+    "leaflet": "^1.9.4",
+    "lucide-vue-next": "^0.563.0",
+    "mysql2": "^3.16.2",
+    "nodemailer": "^7.0.13",
+    "nuxt": "^4.3.0",
+    "simple-notify": "^1.0.6",
+    "vue": "^3.5.27",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/leaflet": "^1.9.21",
+    "@types/nodemailer": "^7.0.9",
+    "dotenv": "^17.2.3",
+    "drizzle-kit": "^0.31.8"
+  }
+}
