@@ -228,7 +228,7 @@ const changePassword = async () => {
 <style module>
 .changePasswordPage {
   min-height: calc(100vh - 120px);
-  width: 100vw;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
