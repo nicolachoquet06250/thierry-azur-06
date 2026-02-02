@@ -15,7 +15,10 @@ const form = ref({
   message: ''
 })
 
+const code = ref('')
 const isSubmitting = ref(false)
+const isSendingCode = ref(false)
+const step = ref(1) // 1: Formulaire, 2: Code de confirmation
 const submitSuccess = ref(false)
 const submitError = ref('')
 
@@ -42,6 +45,28 @@ const reviews = computed(() => (dbReviews.value || []).map((r) => ({
   rating: r.note
 })))
 
+const handleSendCode = async () => {
+  if (!form.value.email) {
+    submitError.value = "Veuillez saisir votre adresse email pour recevoir le code."
+    return
+  }
+  
+  isSendingCode.value = true
+  submitError.value = ''
+  
+  try {
+    await $fetch('/api/send-code', {
+      method: 'POST',
+      body: { email: form.value.email }
+    })
+    step.value = 2
+  } catch (e) {
+    submitError.value = e.data?.statusMessage || "Erreur lors de l'envoi du code de vérification."
+  } finally {
+    isSendingCode.value = false
+  }
+}
+
 const handleSubmit = async () => {
   isSubmitting.value = true
   submitError.value = ''
@@ -51,7 +76,8 @@ const handleSubmit = async () => {
       method: 'POST',
       body: {
         ...form.value,
-        note: rating.value
+        note: rating.value,
+        code: code.value
       }
     })
     await refreshReviews()
@@ -64,6 +90,8 @@ const handleSubmit = async () => {
       message: ''
     }
     rating.value = 5
+    code.value = ''
+    step.value = 1
   } catch (e) {
     submitError.value = e.data?.statusMessage || "Erreur lors de l'envoi de votre avis."
   } finally {
@@ -116,80 +144,94 @@ const handleSubmit = async () => {
               <button @click="submitSuccess = false" :class="$style.submitButton">Envoyer un autre avis</button>
             </div>
 
-            <form v-else :class="$style.form" @submit.prevent="handleSubmit">
-              <div :class="$style.ratingInputGroup">
-                <label :class="$style.label">Votre note</label>
-                <!-- Étoiles pour desktop -->
-                <div :class="[$style.starRating, $style.desktopOnly]">
-                  <button 
-                    v-for="star in 5" 
-                    :key="star" 
-                    type="button"
-                    :class="[$style.starButton, { [$style.active]: star <= (rating || 5) }]"
-                    @click="rating = star"
-                  >
-                    <Star :class="$style.formStarIcon" />
-                  </button>
+            <form v-else :class="$style.form" @submit.prevent="step === 1 ? handleSendCode() : handleSubmit()">
+              <template v-if="step === 1">
+                <div :class="$style.ratingInputGroup">
+                  <label :class="$style.label">Votre note</label>
+                  <!-- Étoiles pour desktop -->
+                  <div :class="[$style.starRating, $style.desktopOnly]">
+                    <button 
+                      v-for="star in 5" 
+                      :key="star" 
+                      type="button"
+                      :class="[$style.starButton, { [$style.active]: star <= rating }]"
+                      @click="rating = star"
+                    >
+                      <Star :class="$style.formStarIcon" />
+                    </button>
+                  </div>
+                  <!-- Champ de saisie pour mobile -->
+                  <div :class="$style.mobileOnly">
+                    <input 
+                      type="number" 
+                      v-model="rating" 
+                      min="1" 
+                      max="5" 
+                      :class="$style.input" 
+                      placeholder="Note sur 5"
+                    />
+                  </div>
                 </div>
-                <!-- Champ de saisie pour mobile -->
-                <div :class="$style.mobileOnly">
-                  <input 
-                    type="number" 
-                    v-model="rating" 
-                    min="1" 
-                    max="5" 
-                    :class="$style.input" 
-                    placeholder="Note sur 5"
-                  />
+
+                <div>
+                  <label :class="$style.label">Nom complet</label>
+                  <input type="text" v-model="form.fullName" :class="$style.input" placeholder="Votre nom" required />
                 </div>
-              </div>
+                
+                <div>
+                  <label :class="$style.label">Email</label>
+                  <input type="email" v-model="form.email" :class="$style.input" placeholder="Votre email" required />
+                </div>
+                
+                <div :class="$style.checkboxGroup">
+                  <label :class="$style.checkboxLabel">
+                    <input type="radio" v-model="form.type" value="particulier" :class="$style.checkbox" />
+                    <span :class="$style.checkboxText">Particulier</span>
+                  </label>
+                  <label :class="$style.checkboxLabel">
+                    <input type="radio" v-model="form.type" value="professionnel" :class="$style.checkbox" />
+                    <span :class="$style.checkboxText">Professionnel</span>
+                  </label>
+                  <label :class="$style.checkboxLabel">
+                    <input type="radio" v-model="form.type" value="copropriete" :class="$style.checkbox" />
+                    <span :class="$style.checkboxText">Copropriété</span>
+                  </label>
+                  <label :class="$style.checkboxLabel">
+                    <input type="radio" v-model="form.type" value="immeuble" :class="$style.checkbox" />
+                    <span :class="$style.checkboxText">Immeuble</span>
+                  </label>
+                </div>
 
-              <div>
-                <label :class="$style.label">Nom complet</label>
-                <input type="text" v-model="form.fullName" :class="$style.input" placeholder="Votre nom" required />
-              </div>
-              
-              <div>
-                <label :class="$style.label">Email</label>
-                <input type="email" v-model="form.email" :class="$style.input" placeholder="Votre email" required />
-              </div>
-              
-              <div :class="$style.checkboxGroup">
-                <label :class="$style.checkboxLabel">
-                  <input type="radio" v-model="form.type" value="particulier" :class="$style.checkbox" />
-                  <span :class="$style.checkboxText">Particulier</span>
-                </label>
-                <label :class="$style.checkboxLabel">
-                  <input type="radio" v-model="form.type" value="professionnel" :class="$style.checkbox" />
-                  <span :class="$style.checkboxText">Professionnel</span>
-                </label>
-                <label :class="$style.checkboxLabel">
-                  <input type="radio" v-model="form.type" value="copropriete" :class="$style.checkbox" />
-                  <span :class="$style.checkboxText">Copropriété</span>
-                </label>
-                <label :class="$style.checkboxLabel">
-                  <input type="radio" v-model="form.type" value="immeuble" :class="$style.checkbox" />
-                  <span :class="$style.checkboxText">Immeuble</span>
-                </label>
-              </div>
+                <div>
+                  <label :class="$style.label">Ville</label>
+                  <select v-model="form.cityId" :class="$style.input" required>
+                    <option :value="null" disabled>Sélectionnez une ville</option>
+                    <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
+                  </select>
+                </div>
 
-              <div>
-                <label :class="$style.label">Ville</label>
-                <select v-model="form.cityId" :class="$style.input" required>
-                  <option :value="null" disabled>Sélectionnez une ville</option>
-                  <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
-                </select>
-              </div>
+                <div>
+                  <label :class="$style.label">Message (optionnel)</label>
+                  <textarea v-model="form.message" :class="$style.textarea" placeholder="Votre message..."></textarea>
+                </div>
+              </template>
 
-              <div>
-                <label :class="$style.label">Message (optionnel)</label>
-                <textarea v-model="form.message" :class="$style.textarea" placeholder="Votre message..."></textarea>
-              </div>
+              <template v-else>
+                <div>
+                  <label :class="$style.label">Code de vérification reçu par email</label>
+                  <p :class="$style.codeHelp">Un code a été envoyé à {{ form.email }}</p>
+                  <input type="text" v-model="code" :class="$style.input" placeholder="Entrez le code à 6 chiffres" required />
+                </div>
+                <button type="button" @click="step = 1" :class="$style.backButton">Modifier mes informations</button>
+              </template>
 
               <div v-if="submitError" :class="$style.errorMsg">{{ submitError }}</div>
 
-              <button type="submit" :class="$style.submitButton" :disabled="isSubmitting">
-                {{ isSubmitting ? 'Envoi...' : 'Donner mon avis' }}
+              <button type="submit" :class="$style.submitButton" :disabled="isSubmitting || isSendingCode">
+                <template v-if="isSubmitting">Envoi en cours...</template>
+                <template v-else-if="isSendingCode">Envoi du code...</template>
+                <template v-else-if="step === 1">Recevoir un code de vérification</template>
+                <template v-else>Valider et donner mon avis</template>
               </button>
               
               <p :class="$style.disclaimer">
@@ -375,12 +417,16 @@ const handleSubmit = async () => {
 }
 
 .successMsg {
-  background-color: #dcfce7;
-  color: #166534;
+  background-color: light-dark(#dcfce7, #064e3b);
+  color: light-dark(#166534, #34d399);
   padding: 1.5rem;
   border-radius: 0.75rem;
   text-align: center;
   margin-bottom: 1.5rem;
+
+  & p {
+    margin-bottom: 1rem;
+  }
 }
 
 .errorMsg {
@@ -460,7 +506,7 @@ const handleSubmit = async () => {
 
 .submitButton {
   width: 100%;
-  background-color: #2563eb;
+  background-color: var(--primary);
   color: white;
   font-weight: 700;
   padding: 1rem;
@@ -472,7 +518,7 @@ const handleSubmit = async () => {
 }
 
 .submitButton:hover {
-  background-color: #1d4ed8;
+  background-color: var(--secondary);
   transform: translateY(-0.125rem);
 }
 
@@ -482,6 +528,25 @@ const handleSubmit = async () => {
   color: var(--text-main);
   margin-top: 1rem;
   line-height: 1.25;
+}
+
+.codeHelp {
+  font-size: 0.875rem;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: var(--primary);
+  text-decoration: underline;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 1rem;
+  display: block;
 }
 
 .ratingInputGroup {

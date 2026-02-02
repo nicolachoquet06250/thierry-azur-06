@@ -131,7 +131,7 @@ const services = [
 .iconWrapper {
   width: 4rem;
   height: 4rem;
-  background-color: #eff6ff; /* bg-blue-50 */
+  background-color: var(--accent);
   border-radius: 1rem;
   display: flex;
   align-items: center;
@@ -142,7 +142,7 @@ const services = [
 .icon {
   width: 2rem;
   height: 2rem;
-  color: #3b82f6; /* text-blue-500 */
+  color: var(--primary);
 }
 
 .cardTitle {
@@ -169,7 +169,7 @@ const services = [
 .checkIcon {
   width: 1.25rem;
   height: 1.25rem;
-  color: #60a5fa; /* text-blue-400 */
+  color: var(--primary);
   flex-shrink: 0;
 }
 
@@ -177,7 +177,7 @@ const services = [
   margin-top: auto;
   width: 100%;
   padding: 0.75rem 1.5rem;
-  background-color: #1d4ed8; /* bg-blue-700 */
+  background-color: var(--primary);
   color: white;
   border-radius: 0.5rem;
   font-weight: 500;
@@ -189,7 +189,7 @@ const services = [
 }
 
 .button:hover {
-  background-color: #1e40af; /* bg-blue-800 */
+  background-color: var(--secondary);
 }
 
 @media (min-width: 768px) {

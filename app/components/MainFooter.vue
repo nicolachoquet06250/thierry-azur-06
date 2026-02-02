@@ -179,7 +179,7 @@ const formattedPhone = computed(() => {
   bottom: 0;
   width: 2rem;
   height: 2px;
-  background-color: #3b82f6;
+  background-color: var(--primary);
 }
 
 .linksGrid {
@@ -208,7 +208,7 @@ const formattedPhone = computed(() => {
 }
 
 .link:hover {
-  color: #60a5fa;
+  color: light-dark(#60a5fa, #93c5fd);
   transform: translateX(4px);
 }
 
@@ -228,7 +228,7 @@ const formattedPhone = computed(() => {
 .contactIcon {
   width: 1.125rem;
   height: 1.125rem;
-  color: #3b82f6;
+  color: var(--primary);
 }
 
 .contactLink {

@@ -232,12 +232,15 @@ const submitForm = async () => {
 }
 
 .button:disabled {
-  background-color: #93c5fd;
+  background-color: var(--accent);
+  color: var(--text-main);
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
 .button.secondary {
-  background-color: #6b7280;
+  background-color: var(--accent);
+  color: var(--text-main);
   margin-top: 10px;
 }
 
@@ -251,7 +254,7 @@ const submitForm = async () => {
 }
 
 .successMessage h2 {
-  color: #059669;
+  color: light-dark(#059669, #10b981);
   margin-bottom: 10px;
 }
 

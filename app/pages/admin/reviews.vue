@@ -12,6 +12,7 @@ const filter = ref('all'); // all, pending, approved
 const searchQuery = ref('');
 
 const { success: notifySuccess, error: notifyError } = useNotify();
+const { ask } = useConfirm();
 
 const fetchReviews = async () => {
   isLoading.value = true;
@@ -45,7 +46,14 @@ const toggleApproval = async (review: any) => {
 };
 
 const deleteReview = async (id: number) => {
-  if (!confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')) return;
+  const confirmed = await ask({
+    title: 'Supprimer l\'avis',
+    message: 'Êtes-vous sûr de vouloir supprimer cet avis ? Cette action est irréversible.',
+    confirmText: 'Supprimer',
+    cancelText: 'Annuler'
+  });
+  
+  if (!confirmed) return;
   
   try {
     const token = localStorage.getItem('auth_token');
@@ -179,10 +187,6 @@ onMounted(fetchReviews);
 </template>
 
 <style module>
-.page {
-  padding: 1.5rem;
-}
-
 .header {
   margin-bottom: 2rem;
 }
@@ -203,6 +207,7 @@ onMounted(fetchReviews);
   color: #ffffff;
   box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
   width: 50px;
+  min-width: 50px;
   height: 50px;
   display: flex;
   justify-content: center;
@@ -331,15 +336,24 @@ onMounted(fetchReviews);
 .cardHeader {
   padding: 1.25rem;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 1rem;
   border-bottom: 1px solid var(--border-color);
+}
+
+@media (min-width: 480px) {
+  .cardHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
 }
 
 .userInfo {
   display: flex;
   gap: 1rem;
   align-items: center;
+  min-width: 0;
 }
 
 .avatar {
@@ -355,16 +369,26 @@ onMounted(fetchReviews);
   font-size: 1.25rem;
 }
 
+.userDetails {
+  min-width: 0;
+}
+
 .userName {
   font-size: 1rem;
   font-weight: 700;
   color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .userEmail {
   font-size: 0.875rem;
   color: var(--text-main);
   opacity: 0.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .statusBadge {
@@ -373,16 +397,18 @@ onMounted(fetchReviews);
   padding: 0.25rem 0.5rem;
   border-radius: 999px;
   text-transform: uppercase;
+  align-self: flex-start;
+  white-space: nowrap;
 }
 
 .approvedBadge {
-  background-color: #dcfce7;
-  color: #166534;
+  background-color: light-dark(#dcfce7, #064e3b);
+  color: light-dark(#166534, #34d399);
 }
 
 .pendingBadge {
-  background-color: #fef3c7;
-  color: #92400e;
+  background-color: light-dark(#fef3c7, #451a03);
+  color: light-dark(#92400e, #fbbf24);
 }
 
 .cardBody {
@@ -437,8 +463,15 @@ onMounted(fetchReviews);
   padding: 1rem;
   background-color: var(--bg-main);
   display: flex;
+  flex-direction: column;
   gap: 0.75rem;
   border-top: 1px solid var(--border-color);
+}
+
+@media (min-width: 480px) {
+  .cardActions {
+    flex-direction: row;
+  }
 }
 
 .actionBtn {
@@ -477,13 +510,12 @@ onMounted(fetchReviews);
 }
 
 .deleteBtn {
-  background-color: transparent;
   color: #ef4444;
-  border-color: #fee2e2;
+  border-color: light-dark(#fee2e2, #450a0a);
 }
 
 .deleteBtn:hover {
-  background-color: #fef2f2;
+  background-color: light-dark(#fef2f2, #450a0a);
   border-color: #ef4444;
 }
 

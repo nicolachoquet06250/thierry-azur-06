@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LayoutDashboard, Users, MessageSquare, LogOut, Database, MapPin } from 'lucide-vue-next';
+import {LayoutDashboard, Users, MessageSquare, LogOut, Database, MapPin, Shield, Star, Lock} from 'lucide-vue-next';
 
 const router = useRouter();
 const { success: notifySuccess } = useNotify();
@@ -8,17 +8,20 @@ const { isOpen, close } = useAdminSidebar();
 const logout = () => {
   close();
   localStorage.removeItem('auth_token');
+  localStorage.removeItem('user_id');
   notifySuccess('Déconnexion', 'Vous avez été déconnecté avec succès');
   router.push('/admin/login');
 };
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Administrateurs', href: '/admin/administrateurs', icon: Shield },
   { name: 'Données Site', href: '/admin/data', icon: Database },
   { name: 'Villes', href: '/admin/cities', icon: MapPin },
-  { name: 'Avis', href: '/admin/reviews', icon: MessageSquare },
+  { name: 'Avis', href: '/admin/reviews', icon: Star },
   { name: 'Contacts', href: '/admin/contact', icon: MessageSquare },
   { name: 'Devis', href: '/admin/devis', icon: Users },
+  { name: 'Sécurité', href: '/admin/change-password', icon: Lock },
 ];
 </script>
 

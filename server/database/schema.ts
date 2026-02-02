@@ -101,6 +101,7 @@ export const users = mysqlTable('users', {
   firstName: varchar('firstname', { length: 255 }).notNull(),
   lastName: varchar('lastname', { length: 255 }).notNull(),
   password: varchar('password', { length: 255 }).notNull(),
+  mustChangePassword: boolean('must_change_password').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow(),
 });
 

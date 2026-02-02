@@ -39,69 +39,70 @@ const login = async () => {
 </script>
 
 <template>
-  <NuxtLayout>
-    <div :class="$style.loginPage">
-      <div :class="$style.bgDecoration">
-        <div :class="[$style.circle, $style.circle1]"></div>
-        <div :class="[$style.circle, $style.circle2]"></div>
-      </div>
+  <div :class="$style.loginPage">
+    <div :class="$style.bgDecoration">
+      <div :class="[$style.circle, $style.circle1]"></div>
+      <div :class="[$style.circle, $style.circle2]"></div>
+    </div>
 
-      <div :class="$style.loginContainer">
-        <div :class="['glass-card', $style.loginCard]">
-          <div :class="$style.loginHeader">
-            <div :class="$style.logoContainer">
-              <LogIn :class="$style.logoIcon" :size="32" />
+    <div :class="$style.loginContainer">
+      <div :class="['glass-card', $style.loginCard]">
+        <div :class="$style.loginHeader">
+          <div :class="$style.logoContainer">
+            <LogIn :class="$style.logoIcon" :size="32" />
+          </div>
+          <h2>Administration</h2>
+          <p>Accédez à votre tableau de bord</p>
+        </div>
+
+        <form :class="$style.loginForm" @submit.prevent="login">
+          <div :class="$style.formGroup">
+            <label for="email-address">Email</label>
+            <div :class="$style.inputWrapper">
+              <Mail :class="$style.inputIcon" :size="18" />
+              <input
+                  v-model="email"
+                  id="email-address"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="votre@email.com"
+                  :disabled="loading"
+              />
             </div>
-            <h2>Administration</h2>
-            <p>Accédez à votre tableau de bord</p>
           </div>
 
-          <form :class="$style.loginForm" @submit.prevent="login">
-            <div :class="$style.formGroup">
-              <label for="email-address">Email</label>
-              <div :class="$style.inputWrapper">
-                <Mail :class="$style.inputIcon" :size="18" />
-                <input
-                    v-model="email"
-                    id="email-address"
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="votre@email.com"
-                    :disabled="loading"
-                />
-              </div>
-            </div>
-
-            <div :class="$style.formGroup">
+          <div :class="$style.formGroup">
+            <div :class="$style.labelRow">
               <label for="password">Mot de passe</label>
-              <div :class="$style.inputWrapper">
-                <Lock :class="$style.inputIcon" :size="18" />
-                <input
-                    v-model="password"
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    placeholder="••••••••"
-                    :disabled="loading"
-                />
-              </div>
+              <NuxtLink to="/admin/forgot-password" :class="$style.forgotLink">Mot de passe oublié ?</NuxtLink>
             </div>
+            <div :class="$style.inputWrapper">
+              <Lock :class="$style.inputIcon" :size="18" />
+              <input
+                  v-model="password"
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  :disabled="loading"
+              />
+            </div>
+          </div>
 
-            <button
-                type="submit"
-                :disabled="loading"
-                :class="['btn-primary', $style.loginButton]"
-            >
-              <Loader2 v-if="loading" :class="$style.animateSpin" :size="20" />
-              <span v-else>Se connecter</span>
-            </button>
-          </form>
-        </div>
+          <button
+              type="submit"
+              :disabled="loading"
+              :class="['btn-primary', $style.loginButton]"
+          >
+            <Loader2 v-if="loading" :class="$style.animateSpin" :size="20" />
+            <span v-else>Se connecter</span>
+          </button>
+        </form>
       </div>
     </div>
-  </NuxtLayout>
+  </div>
 </template>
 
 <style module>
@@ -205,6 +206,24 @@ const login = async () => {
   font-weight: 500;
   color: var(--text-main);
   margin-left: 4px;
+}
+
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgotLink {
+  font-size: 12px;
+  color: var(--primary);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.forgotLink:hover {
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
 .inputWrapper {

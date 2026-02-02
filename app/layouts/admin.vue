@@ -3,18 +3,20 @@
     <AdminSidebar />
     <div :class="$style.mainContent">
       <AdminHeader />
-      <main :class="$style.scrollArea">
+      <main :class="[$style.scrollArea, $route.path === '/admin/change-password' ? $style.changePassword : '']">
         <div :class="$style.container">
           <slot />
         </div>
       </main>
     </div>
+    <ConfirmModal />
   </div>
 </template>
 
 <script setup lang="ts">
 import AdminHeader from '~/components/AdminHeader.vue';
 import AdminSidebar from '~/components/AdminSidebar.vue';
+import ConfirmModal from '~/components/ConfirmModal.vue';
 </script>
 
 <style module>
@@ -36,7 +38,10 @@ import AdminSidebar from '~/components/AdminSidebar.vue';
 .scrollArea {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
+
+  &:not(&.changePassword) {
+    padding: 1rem;
+  }
 }
 
 .container {
@@ -47,7 +52,9 @@ import AdminSidebar from '~/components/AdminSidebar.vue';
 
 @media (min-width: 768px) {
   .scrollArea {
-    padding: 2rem;
+    /*&:not(&.changePassword) {
+      padding: 2rem;
+    }*/
   }
 }
 </style>

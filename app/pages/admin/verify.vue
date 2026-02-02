@@ -34,10 +34,17 @@ const verify = async () => {
     
     // Store token
     localStorage.setItem('auth_token', response.token);
+    localStorage.setItem('user_id', response.user.id.toString());
     localStorage.removeItem('2fa_userId');
     
-    // Redirect to dashboard
-    await navigateTo('/admin');
+    // Check if password change is required
+    if (response.user.mustChangePassword) {
+      localStorage.setItem('must_change_password', 'true');
+      await navigateTo('/admin/change-password');
+    } else {
+      // Redirect to dashboard
+      await navigateTo('/admin');
+    }
   } catch (err: any) {
     await notifyError('Erreur', err.data?.statusMessage || 'Code invalide ou expiré');
   } finally {
@@ -52,8 +59,7 @@ const goBack = () => {
 </script>
 
 <template>
-  <NuxtLayout>
-    <div :class="$style.verifyPage">
+  <div :class="$style.verifyPage">
       <div :class="$style.bgDecoration">
         <div :class="[$style.circle, $style.circle1]"></div>
         <div :class="[$style.circle, $style.circle2]"></div>
@@ -106,7 +112,6 @@ const goBack = () => {
         </div>
       </div>
     </div>
-  </NuxtLayout>
 </template>
 
 <style module>

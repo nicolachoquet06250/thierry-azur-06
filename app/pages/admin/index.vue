@@ -142,7 +142,7 @@ onMounted(() => {
         </div>
       </NuxtLink>
 
-      <div style="grid-column: span 2;">
+      <div :class="$style.fullWidth">
         <!-- Dernières Activités Section -->
         <div id="activities-section" :class="$style.activitySection">
           <div :class="$style.activityHeader">
@@ -177,9 +177,9 @@ onMounted(() => {
             <div :class="$style.activityList">
               <div v-for="activity in activities" :key="activity.type + activity.id" :class="$style.activityItem">
                 <div :class="[
-              $style.activityItemIcon,
-              activity.type === 'devis' ? $style.devisIcon : (activity.type === 'review' ? $style.reviewIcon : $style.contactIcon)
-            ]">
+                  $style.activityItemIcon,
+                  activity.type === 'devis' ? $style.devisIcon : (activity.type === 'review' ? $style.reviewIcon : $style.contactIcon)
+                ]">
                   <Users v-if="activity.type === 'devis'" :size="18" />
                   <Star v-else-if="activity.type === 'review'" :size="18" />
                   <MessageSquare v-else :size="18" />
@@ -190,12 +190,12 @@ onMounted(() => {
                     <span :class="$style.activityItemDate">{{ formatDate(activity.createdAt) }}</span>
                   </div>
                   <div :class="$style.activityItemMeta">
-                <span :class="[
-                  $style.typeBadge,
-                  activity.type === 'devis' ? $style.devisBadge : (activity.type === 'review' ? $style.reviewBadge : $style.contactBadge)
-                ]">
-                  {{ activity.type === 'devis' ? 'Devis' : (activity.type === 'review' ? 'Avis' : 'Contact') }}
-                </span>
+                    <span :class="[
+                      $style.typeBadge,
+                      activity.type === 'devis' ? $style.devisBadge : (activity.type === 'review' ? $style.reviewBadge : $style.contactBadge)
+                    ]">
+                      {{ activity.type === 'devis' ? 'Devis' : (activity.type === 'review' ? 'Avis' : 'Contact') }}
+                    </span>
                     <span :class="$style.activityItemSubject">{{ activity.subject }}</span>
                   </div>
                 </div>
@@ -299,18 +299,24 @@ onMounted(() => {
   display: grid;
   grid-template-cols: 1fr;
   gap: 1.5rem;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
   .statsGrid {
     grid-template-cols: repeat(2, 1fr);
   }
+
+  .fullWidth {
+    grid-column: span 2;
+  }
 }
 
-/* On force la carte de support à prendre toute la largeur sur ordi pour que les deux premières restent seules sur leur ligne si besoin, 
-   ou on la laisse simplement couler à la ligne suivante. 
-   L'utilisateur a demandé les deux premières sur une ligne. */
 @media (min-width: 1024px) {
+  .fullWidth {
+    grid-column: span 2;
+  }
+  
   .darkCard {
     grid-column: span 2;
   }
@@ -326,6 +332,9 @@ onMounted(() => {
   transition: all 0.3s;
   cursor: default;
   color: var(--text-main);
+  min-width: 0;
+  width: 100%;
+  max-width: calc(100vw - 30px);
 }
 
 .card:hover {
@@ -346,15 +355,15 @@ onMounted(() => {
 }
 
 .blueIcon {
-  background-color: #eff6ff; /* blue-50 */
+  background-color: light-dark(#eff6ff, #1e293b); /* blue-50 / slate-800 */
 }
 
 .card:hover .blueIcon {
-  background-color: #2563eb; /* blue-600 */
+  background-color: var(--primary); /* blue-600 */
 }
 
 .emeraldIcon {
-  background-color: #ecfdf5; /* emerald-50 */
+  background-color: light-dark(#ecfdf5, #064e3b); /* emerald-50 / emerald-900/50 */
 }
 
 .card:hover .emeraldIcon {
@@ -437,13 +446,13 @@ onMounted(() => {
 }
 
 .blueBadge {
-  color: #2563eb;
-  background-color: #eff6ff;
+  color: light-dark(#2563eb, #60a5fa);
+  background-color: light-dark(#eff6ff, #1e293b);
 }
 
 .emeraldBadge {
-  color: #059669;
-  background-color: #ecfdf5;
+  color: light-dark(#059669, #34d399);
+  background-color: light-dark(#ecfdf5, #064e3b);
 }
 
 /* Dark Card */
@@ -525,6 +534,7 @@ onMounted(() => {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   border: 1px solid var(--border-color);
   overflow: hidden;
+  max-width: calc(100vw - 30px);
 }
 
 .activityHeader {
@@ -560,21 +570,6 @@ onMounted(() => {
 .activityTitle {
   font-weight: 700;
   color: var(--text-main);
-}
-
-.viewAllButton {
-  font-size: 0.875rem;
-  color: #2563eb;
-  font-weight: 600;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.viewAllButton:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
 }
 
 .emptyState {
@@ -656,6 +651,8 @@ onMounted(() => {
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border-color);
   transition: background-color 0.2s;
+  min-width: 0;
+  width: 100%;
 }
 
 .activityItem:last-child {
@@ -703,7 +700,8 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.25rem;
-  gap: 1rem;
+  gap: 0.5rem;
+  min-width: 0;
 }
 
 .activityItemName {
@@ -712,12 +710,15 @@ onMounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
 }
 
 .activityItemDate {
   font-size: 0.75rem;
   color: var(--text-main);
   opacity: 0.6;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .activityItemMeta {

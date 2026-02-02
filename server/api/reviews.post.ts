@@ -1,13 +1,21 @@
 import { notes } from '~~/server/database/schema';
+import { verifyCode } from '../utils/mail';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { fullName, email, type, cityId, message, note } = body;
+  const { fullName, email, type, cityId, message, note, code } = body;
 
-  if (!fullName || !email || !type || !cityId || !note) {
+  if (!fullName || !email || !type || !cityId || !note || !code) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Champs obligatoires manquants',
+      statusMessage: 'Champs obligatoires manquants (dont le code de vérification)',
+    });
+  }
+
+  if (!verifyCode(email, code)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Code de vérification invalide ou expiré',
     });
   }
 

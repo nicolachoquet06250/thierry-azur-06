@@ -14,6 +14,7 @@ const editingCity = ref<any>(null);
 const cityForm = ref({ name: '', lat: 0, lng: 0 });
 
 const { success: notifySuccess, error: notifyError } = useNotify();
+const { ask } = useConfirm();
 
 const fetchCities = async () => {
   isLoading.value = true;
@@ -92,7 +93,14 @@ const saveCity = async () => {
 };
 
 const deleteCity = async (id: number) => {
-  if (!confirm('Êtes-vous sûr de vouloir supprimer cette ville ?')) return;
+  const confirmed = await ask({
+    title: 'Supprimer la ville',
+    message: 'Êtes-vous sûr de vouloir supprimer cette ville ? Cette action est irréversible.',
+    confirmText: 'Supprimer',
+    cancelText: 'Annuler'
+  });
+  
+  if (!confirmed) return;
   
   try {
     const token = localStorage.getItem('auth_token');
@@ -287,10 +295,6 @@ onMounted(fetchCities);
 </template>
 
 <style module>
-.page {
-  padding: 1.5rem;
-}
-
 .header {
   display: flex;
   flex-direction: column;
@@ -317,13 +321,13 @@ onMounted(fetchCities);
 }
 
 .subtitle {
-  color: #64748b;
+  color: light-dark(#64748b, #94a3b8);
   margin-top: 0.5rem;
   font-weight: 500;
 }
 
 .addButton {
-  background-color: #0f172a;
+  background-color: var(--primary);
   color: #ffffff;
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
@@ -337,7 +341,7 @@ onMounted(fetchCities);
 }
 
 .addButton:hover {
-  background-color: #2563eb;
+  filter: brightness(1.1);
   box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
 }
 
@@ -366,7 +370,7 @@ onMounted(fetchCities);
 
 .spinner {
   animation: spin 1s linear infinite;
-  color: #2563eb;
+  color: var(--primary);
 }
 
 @keyframes spin {
@@ -399,7 +403,7 @@ onMounted(fetchCities);
 
 .card:hover {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border-color: #bfdbfe;
+  border-color: var(--primary);
 }
 
 .cardContent {
@@ -417,10 +421,10 @@ onMounted(fetchCities);
 }
 
 .cityIconWrapper {
-  background-color: #eff6ff;
+  background-color: light-dark(#eff6ff, #1e293b);
   padding: 0.5rem;
   border-radius: 0.5rem;
-  color: #2563eb;
+  color: var(--primary);
   flex-shrink: 0;
 }
 
@@ -462,17 +466,17 @@ onMounted(fetchCities);
   border: none;
   background: transparent;
   cursor: pointer;
-  color: #94a3b8;
+  color: light-dark(#94a3b8, #64748b);
 }
 
 .editButton:hover {
-  color: #2563eb;
-  background-color: #eff6ff;
+  color: var(--primary);
+  background-color: light-dark(#eff6ff, #1e293b);
 }
 
 .deleteButton:hover {
   color: #dc2626;
-  background-color: #fef2f2;
+  background-color: light-dark(#fef2f2, #450a0a);
 }
 
 .emptyState {
@@ -489,7 +493,7 @@ onMounted(fetchCities);
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #2563eb;
+  color: var(--primary);
   font-weight: 600;
   background: transparent;
   border: none;
@@ -498,7 +502,7 @@ onMounted(fetchCities);
 }
 
 .emptyAddButton:hover {
-  color: #1d4ed8;
+  color: var(--secondary);
 }
 
 .modalOverlay {
@@ -519,7 +523,7 @@ onMounted(fetchCities);
 }
 
 .modalContainer {
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   border-radius: 1rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   width: 100%;
@@ -527,6 +531,7 @@ onMounted(fetchCities);
   position: relative;
   z-index: 10;
   overflow: hidden;
+  border: 1px solid var(--border-color);
   animation: fadeInUp 0.3s ease-out;
 }
 
@@ -571,23 +576,24 @@ onMounted(fetchCities);
 }
 
 .modalTitleIcon {
-  background-color: #eff6ff;
+  background-color: light-dark(#eff6ff, #1e293b);
   padding: 0.5rem;
   border-radius: 0.75rem;
-  color: #2563eb;
+  color: var(--primary);
 }
 
 .closeButton {
-  color: #94a3b8;
+  color: var(--text-main);
+  opacity: 0.5;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0.25rem;
-  transition: color 0.2s;
+  transition: opacity 0.2s;
 }
 
 .closeButton:hover {
-  color: #475569;
+  opacity: 1;
 }
 
 .closeIcon {
@@ -604,7 +610,7 @@ onMounted(fetchCities);
   display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #334155;
+  color: var(--text-main);
   margin-bottom: 0.5rem;
 }
 
@@ -615,28 +621,29 @@ onMounted(fetchCities);
 .input {
   width: 100%;
   padding: 0.75rem 1rem;
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
   border-radius: 0.75rem;
-  color: #1e293b;
+  color: var(--text-main);
   transition: all 0.2s;
   outline: none;
 }
 
 .input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-  background-color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px light-dark(rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.2));
+  background-color: var(--bg-card);
 }
 
 .input::placeholder {
-  color: #94a3b8;
+  color: var(--text-main);
+  opacity: 0.5;
 }
 
 .inputHelp {
   margin-top: 0.5rem;
   font-size: 0.75rem;
-  color: #64748b;
+  color: light-dark(#64748b, #94a3b8);
   font-style: italic;
 }
 
@@ -649,8 +656,8 @@ onMounted(fetchCities);
 .cancelButton {
   flex: 1;
   padding: 0.75rem 1.5rem;
-  border: 1px solid #e2e8f0;
-  color: #475569;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
   font-weight: 600;
   border-radius: 0.75rem;
   background-color: transparent;
@@ -659,14 +666,14 @@ onMounted(fetchCities);
 }
 
 .cancelButton:hover {
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: light-dark(#f8fafc, #1e293b);
+  color: var(--text-main);
 }
 
 .saveButton {
   flex: 2;
   padding: 0.75rem 1.5rem;
-  background-color: #2563eb;
+  background-color: var(--primary);
   color: #ffffff;
   font-weight: 700;
   border-radius: 0.75rem;
@@ -681,7 +688,7 @@ onMounted(fetchCities);
 }
 
 .saveButton:hover {
-  background-color: #1d4ed8;
+  filter: brightness(1.1);
 }
 
 .saveButton:active {

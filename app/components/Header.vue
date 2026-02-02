@@ -94,8 +94,9 @@ onUnmounted(() => {
 }
 
 .scrolled {
-  background-color: var(--bg-card);
-  backdrop-filter: blur(10px);
+  background-color: light-dark(rgba(255, 255, 255, 0.8), rgba(15, 23, 42, 0.8));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
@@ -144,11 +145,11 @@ onUnmounted(() => {
 }
 
 .navLink:hover {
-  color: #60a5fa !important;
+  color: light-dark(#60a5fa, #93c5fd) !important;
 }
 
 .ctaButton {
-  background-color: #3b82f6;
+  background-color: var(--primary);
   color: white;
   padding: 0.625rem 1.5rem;
   border-radius: 9999px;
@@ -159,7 +160,7 @@ onUnmounted(() => {
 }
 
 .ctaButton:hover {
-  background-color: #2563eb;
+  background-color: var(--secondary);
   transform: translateY(-2px);
   box-shadow: 0 8px 16px -1px rgba(59, 130, 246, 0.5);
 }
@@ -179,7 +180,7 @@ onUnmounted(() => {
 }
 
 .scrolled .mobileMenuButton {
-  color: #1e3a8a;
+  color: var(--primary);
 }
 
 .mobileNav {
@@ -187,14 +188,18 @@ onUnmounted(() => {
   top: 100%;
   left: 0;
   right: 0;
-  background-color: var(--bg-card);
-  backdrop-filter: blur(10px);
+  background-color: light-dark(rgba(255, 255, 255, 0.8), rgba(15, 23, 42, 0.8));
+  -webkit-backdrop-filter: blur(12px);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
   border-top: 1px solid var(--border-color);
+}
+
+.scrolled .mobileNav {
+  backdrop-filter: blur(12px);
 }
 
 .mobileNavLink {
@@ -205,7 +210,7 @@ onUnmounted(() => {
 }
 
 .mobileCtaButton {
-  background-color: #3b82f6;
+  background-color: var(--primary);
   color: white;
   padding: 0.875rem;
   border-radius: 0.5rem;

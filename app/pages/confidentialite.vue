@@ -188,12 +188,12 @@ const siteUrl = computed(() => {
 <style module>
 .page {
   padding-top: 80px;
-  background-color: #f8fafc;
+  background-color: var(--bg-main);
   min-height: 100vh;
 }
 
 .header {
-  background-color: #1e3a8a;
+  background-color: var(--secondary);
   color: white;
   padding: 60px 0;
   text-align: center;
@@ -220,24 +220,25 @@ const siteUrl = computed(() => {
 }
 
 .section {
-  background: white;
+  background: var(--bg-card);
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
+  border: 1px solid var(--border-color);
 }
 
 .section h2 {
-  color: #1e3a8a;
+  color: var(--primary);
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--border-color);
   padding-bottom: 0.75rem;
 }
 
 .section h3 {
-  color: #1e3a8a;
+  color: var(--primary);
   margin-top: 1.5rem;
   margin-bottom: 1rem;
   font-size: 1.25rem;
@@ -245,7 +246,7 @@ const siteUrl = computed(() => {
 
 .section p {
   line-height: 1.7;
-  color: #475569;
+  color: var(--text-main);
   margin-bottom: 1.25rem;
 }
 
@@ -257,14 +258,14 @@ const siteUrl = computed(() => {
 
 .section li {
   margin-bottom: 0.75rem;
-  color: #475569;
+  color: var(--text-main);
   line-height: 1.5;
 }
 
 .section blockquote {
-  border-left: 4px solid #1e3a8a;
+  border-left: 4px solid var(--primary);
   padding: 10px 20px;
-  background: #f1f5f9;
+  background: var(--accent);
   margin: 20px 0;
   font-style: italic;
 }

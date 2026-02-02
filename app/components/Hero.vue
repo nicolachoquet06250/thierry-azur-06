@@ -123,14 +123,14 @@ const heroImage = computed(() => {
 }
 
 .titleAccent {
-  color: #93c5fd; /* text-blue-300 */
+  color: light-dark(#93c5fd, #60a5fa); /* text-blue-300 / text-blue-400 */
 }
 
 .description {
   font-size: 1.25rem; /* text-xl */
   margin-bottom: 2.5rem;
   max-width: 42rem; /* max-w-2xl */
-  color: #f0f9ff; /* text-blue-50 */
+  color: light-dark(#f0f9ff, #e0f2fe); /* text-blue-50 / text-blue-100 */
   font-weight: 500;
 }
 
@@ -142,7 +142,7 @@ const heroImage = computed(() => {
 }
 
 .primaryButton {
-  background-color: #3b82f6;
+  background-color: var(--primary);
   color: white;
   font-weight: 700;
   padding: 1rem 2rem;
@@ -153,7 +153,7 @@ const heroImage = computed(() => {
 }
 
 .primaryButton:hover {
-  background-color: #2563eb;
+  background-color: var(--secondary);
   transform: translateY(-0.25rem);
 }
 
@@ -193,7 +193,7 @@ const heroImage = computed(() => {
 }
 
 .checkIcon {
-  background-color: #3b82f6;
+  background-color: var(--primary);
   border-radius: 9999px;
   min-width: 30px;
   width: 30px;
