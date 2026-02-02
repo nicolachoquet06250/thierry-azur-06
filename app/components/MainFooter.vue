@@ -1,7 +1,14 @@
 <script setup>
-import { MapPin, Phone, Mail, ChevronRight } from 'lucide-vue-next'
+import { MapPin, Phone, Mail, ChevronRight, Settings } from 'lucide-vue-next'
+import { ref, onMounted } from 'vue'
 
 const { data: metadata } = await useFetch('/api/data/metadata')
+
+const isAdmin = ref(false)
+
+onMounted(() => {
+  isAdmin.value = !!localStorage.getItem('auth_token')
+})
 
 const handleCall = () => {
   window.location.href = `tel:${metadata.value.phone}`
@@ -117,6 +124,12 @@ const formattedPhone = computed(() => {
           <NuxtLink to="/mentions-legales" :class="$style.legalLink">Mentions légales</NuxtLink>
           <span :class="$style.separator">|</span>
           <NuxtLink to="/confidentialite" :class="$style.legalLink">Confidentialité</NuxtLink>
+          <template v-if="isAdmin">
+            <span :class="$style.separator">|</span>
+            <NuxtLink to="/admin" :class="$style.legalLink" title="Administration">
+              <Settings :class="$style.adminIcon" />
+            </NuxtLink>
+          </template>
         </div>
       </div>
     </div>
@@ -310,6 +323,12 @@ const formattedPhone = computed(() => {
   align-items: center;
   gap: 1rem;
   font-size: 0.875rem;
+}
+
+.adminIcon {
+  width: 1rem;
+  height: 1rem;
+  display: block;
 }
 
 .legalLink {

@@ -40,7 +40,9 @@ const navigation = [
             <img src="/thierry-azur-06_white_transparent.png" alt="logo" height="24" width="auto" style="height: 24px; width: auto;" />
           </NuxtLink>
         </div>
-        <span :class="$style.logoText">Admin<span :class="$style.logoTextHighlight">Panel</span></span>
+        <NuxtLink to="/admin" style="text-decoration: none;">
+          <span :class="$style.logoText">Admin<span :class="$style.logoTextHighlight">Panel</span></span>
+        </NuxtLink>
       </div>
       
       <nav :class="$style.nav">
