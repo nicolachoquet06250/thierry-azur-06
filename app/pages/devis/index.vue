@@ -1,13 +1,17 @@
 <script setup lang="ts">
+const { data: metadata } = await useFetch('/api/data/metadata')
+const defaultDesc = 'Demandez un devis'
+const description = computed(() => metadata.value?.description || defaultDesc)
+
 useSeoMeta({
   twitterCard: 'summary',
   twitterTitle: 'Thierry Azur 06 | Demande de devis',
-  twitterDescription: 'Demandez un devis',
+  twitterDescription: description,
   twitterImage: '/logo.png',
   ogTitle: 'Thierry Azur 06 | Demande de devis',
-  ogDescription: 'Demandez un devis',
+  ogDescription: description,
   ogImage: '/thierry-azur-06.png',
-  description: 'Demandez un devis'
+  description: description
 })
 </script>
 

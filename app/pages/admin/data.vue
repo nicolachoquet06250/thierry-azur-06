@@ -11,6 +11,7 @@ const metadata = ref({
   contactEmail: '',
   devisEmail: '',
   schedules: '',
+  description: '',
   imageHeroContent: null as any,
   imageZonesContent: null as any
 });
@@ -101,6 +102,7 @@ const saveMetadata = async () => {
     formData.append('contactEmail', metadata.value.contactEmail);
     formData.append('devisEmail', metadata.value.devisEmail);
     formData.append('schedules', metadata.value.schedules);
+    formData.append('description', metadata.value.description);
     
     if (files.value.hero) {
       formData.append('imageHero', files.value.hero);
@@ -257,6 +259,12 @@ onMounted(() => {
               <label :class="$style.label">Horaires</label>
               <div :class="$style.inputWrapper">
                 <input v-model="metadata.schedules" type="text" :class="$style.input" />
+              </div>
+            </div>
+            <div :class="$style.formGroup">
+              <label :class="$style.label">Description (Meta OG & Footer)</label>
+              <div :class="$style.inputWrapper">
+                <textarea v-model="metadata.description" rows="3" :class="$style.textarea"></textarea>
               </div>
             </div>
 

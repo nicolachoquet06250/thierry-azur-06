@@ -20,10 +20,10 @@ const submitSuccess = ref(false)
 const submitError = ref('')
 
 const title = computed(() =>
-    about.value.reviewsSectionTitle || 'Ils recommandent Thierry Azur 06')
+    about.value?.reviewsSectionTitle)
 
 const sectionSubtitle = computed(() =>
-    about.value.reviewsSectionSubtitle || 'Avis clients sur Google')
+    about.value?.reviewsSectionSubtitle)
 
 const sectionRating = computed(() => {
   if (!dbReviews.value || dbReviews.value.length === 0) {

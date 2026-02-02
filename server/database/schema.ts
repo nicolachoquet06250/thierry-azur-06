@@ -45,6 +45,7 @@ export const metadata = mysqlTable('metadata', {
   imageHeroSize: float('image_hero_size'),
   imageHeroType: varchar('image_hero_type', { length: 50 }),
   imageHeroContent: longblob('image_hero_content'),
+  description: text('description'),
   imageZonesName: varchar('image_zones_name', { length: 255 }),
   imageZonesSize: float('image_zones_size'),
   imageZonesType: varchar('image_zones_type', { length: 50 }),

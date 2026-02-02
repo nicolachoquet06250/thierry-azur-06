@@ -26,7 +26,7 @@ const formattedPhone = computed(() => {
             <img src="/thierry-azur-06_white_transparent.png" alt="logo" style="width: 150px;">
           </div>
           <p :class="$style.brandDesc">
-            Services de nettoyage professionnel pour particuliers et entreprises dans les Alpes-Maritimes. Excellence, ponctualité et finitions impeccables.
+            {{ metadata?.description }}
           </p>
         </div>
 

@@ -1,0 +1,1 @@
+ALTER TABLE `metadata` ADD `description` text;

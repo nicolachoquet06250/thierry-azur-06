@@ -29,6 +29,7 @@ export default defineEventHandler(async (event) => {
     if (field.name === 'contactEmail') updateData.contactEmail = field.data.toString();
     if (field.name === 'devisEmail') updateData.devisEmail = field.data.toString();
     if (field.name === 'schedules') updateData.schedules = field.data.toString();
+    if (field.name === 'description') updateData.description = field.data.toString();
 
     if (field.name === 'imageHero' && field.filename) {
       updateData.imageHeroName = field.filename;

@@ -6,7 +6,8 @@ export default defineEventHandler(async (): Promise<{
   devisEmail: string,
   schedules: string,
   imageHeroContent?: string|null,
-  imageZonesContent?: string|null
+  imageZonesContent?: string|null,
+  description?: string|null
 }> => {
   const db = useDb();
   
