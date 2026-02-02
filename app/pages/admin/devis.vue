@@ -74,6 +74,10 @@ onMounted(fetchDevis);
 </script>
 
 <template>
+  <Head>
+    <Title>Thierry Azur 06 | Les demandes de devis</Title>
+  </Head>
+
   <div :class="$style.page">
     <div :class="$style.header">
       <div :class="$style.headerMain">

@@ -43,6 +43,10 @@ onMounted(fetchContacts);
 </script>
 
 <template>
+  <Head>
+    <Title>Thierry Azur 06 | Mes demandes de contacts</Title>
+  </Head>
+
   <div :class="$style.page">
     <div :class="$style.header">
       <div>

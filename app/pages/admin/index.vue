@@ -89,6 +89,10 @@ onMounted(() => {
 </script>
 
 <template>
+  <Head>
+    <Title>Thierry Azur 06 | Dashboard d'administration</Title>
+  </Head>
+
   <div :class="$style.dashboard">
     <!-- Header de bienvenue -->
     <div :class="$style.header">

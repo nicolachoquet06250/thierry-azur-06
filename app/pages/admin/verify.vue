@@ -59,59 +59,63 @@ const goBack = () => {
 </script>
 
 <template>
+  <Head>
+    <Title>Thierry Azur 06 | Vérification de mon identité</Title>
+  </Head>
+
   <div :class="$style.verifyPage">
-      <div :class="$style.bgDecoration">
-        <div :class="[$style.circle, $style.circle1]"></div>
-        <div :class="[$style.circle, $style.circle2]"></div>
-      </div>
+    <div :class="$style.bgDecoration">
+      <div :class="[$style.circle, $style.circle1]"></div>
+      <div :class="[$style.circle, $style.circle2]"></div>
+    </div>
 
-      <div :class="$style.verifyContainer">
-        <div :class="['glass-card', $style.verifyCard]">
-          <button @click="goBack" :class="$style.backButton" title="Retour à la connexion">
-            <ArrowLeft :size="20" />
+    <div :class="$style.verifyContainer">
+      <div :class="['glass-card', $style.verifyCard]">
+        <button @click="goBack" :class="$style.backButton" title="Retour à la connexion">
+          <ArrowLeft :size="20" />
+        </button>
+
+        <div :class="$style.verifyHeader">
+          <div :class="$style.logoContainer">
+            <ShieldCheck :class="$style.logoIcon" :size="32" />
+          </div>
+          <h2>Vérification</h2>
+          <p>Entrez le code de sécurité envoyé à votre adresse email</p>
+        </div>
+
+        <form :class="$style.verifyForm" @submit.prevent="verify">
+          <div :class="$style.formGroup">
+            <label for="code">Code de vérification</label>
+            <input
+                v-model="code"
+                id="code"
+                name="code"
+                type="text"
+                required
+                maxlength="6"
+                placeholder="000000"
+                :class="$style.codeInput"
+                :disabled="loading"
+                autocomplete="one-time-code"
+            />
+          </div>
+
+          <button
+              type="submit"
+              :disabled="loading || code.length !== 6"
+              :class="['btn-primary', $style.verifyButton]"
+          >
+            <Loader2 v-if="loading" :class="$style.animateSpin" :size="20" />
+            <span v-else>Vérifier le code</span>
           </button>
+        </form>
 
-          <div :class="$style.verifyHeader">
-            <div :class="$style.logoContainer">
-              <ShieldCheck :class="$style.logoIcon" :size="32" />
-            </div>
-            <h2>Vérification</h2>
-            <p>Entrez le code de sécurité envoyé à votre adresse email</p>
-          </div>
-
-          <form :class="$style.verifyForm" @submit.prevent="verify">
-            <div :class="$style.formGroup">
-              <label for="code">Code de vérification</label>
-              <input
-                  v-model="code"
-                  id="code"
-                  name="code"
-                  type="text"
-                  required
-                  maxlength="6"
-                  placeholder="000000"
-                  :class="$style.codeInput"
-                  :disabled="loading"
-                  autocomplete="one-time-code"
-              />
-            </div>
-
-            <button
-                type="submit"
-                :disabled="loading || code.length !== 6"
-                :class="['btn-primary', $style.verifyButton]"
-            >
-              <Loader2 v-if="loading" :class="$style.animateSpin" :size="20" />
-              <span v-else>Vérifier le code</span>
-            </button>
-          </form>
-
-          <div :class="$style.verifyFooter">
-            <p>Vous n'avez pas reçu le code ? <br> Vérifiez vos spams ou réessayez dans quelques minutes.</p>
-          </div>
+        <div :class="$style.verifyFooter">
+          <p>Vous n'avez pas reçu le code ? <br> Vérifiez vos spams ou réessayez dans quelques minutes.</p>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <style module>

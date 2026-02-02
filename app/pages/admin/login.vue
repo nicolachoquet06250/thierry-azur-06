@@ -39,6 +39,10 @@ const login = async () => {
 </script>
 
 <template>
+  <Head>
+    <Title>Thierry Azur 06 | Connexion</Title>
+  </Head>
+
   <div :class="$style.loginPage">
     <div :class="$style.bgDecoration">
       <div :class="[$style.circle, $style.circle1]"></div>

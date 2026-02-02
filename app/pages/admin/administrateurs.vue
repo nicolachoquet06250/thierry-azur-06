@@ -111,6 +111,10 @@ onMounted(fetchAdmins);
 </script>
 
 <template>
+  <Head>
+    <Title>Thierry Azur 06 | Gestion des Administrateurs</Title>
+  </Head>
+
   <div :class="$style.page">
     <div :class="$style.header">
       <div>

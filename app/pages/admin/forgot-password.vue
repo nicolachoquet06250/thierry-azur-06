@@ -23,7 +23,7 @@ const requestReset = async () => {
   
   loading.value = true;
   try {
-    const response = await $fetch('/api/auth/request-reset-password', {
+    const response = await $fetch<{ userId: number, message: string }>('/api/auth/request-reset-password', {
       method: 'POST',
       body: { email: email.value },
     });
@@ -76,6 +76,10 @@ const resetPassword = async () => {
 </script>
 
 <template>
+  <Head>
+    <Title>Thierry Azur 06 | Changer mon mot de passe</Title>
+  </Head>
+
   <div :class="$style.forgotPage">
     <div :class="$style.bgDecoration">
       <div :class="[$style.circle, $style.circle1]"></div>

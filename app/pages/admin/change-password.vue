@@ -106,6 +106,10 @@ const changePassword = async () => {
 </script>
 
 <template>
+  <Head>
+    <Title>Thierry Azur 06 | Changer de mot de passe</Title>
+  </Head>
+
   <div :class="$style.changePasswordPage">
       <div :class="$style.bgDecoration">
         <div :class="[$style.circle, $style.circle1]"></div>
