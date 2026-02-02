@@ -31,6 +31,7 @@ export const notes = mysqlTable('notes', {
   cityId: int('city_id').notNull().references(() => cities.id),
   message: text('message'),
   note: float('note').notNull(),
+  approved: boolean('approved').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow(),
 });
 
@@ -56,6 +57,8 @@ export const about = mysqlTable('about', {
   historySectionTitle: varchar('history_section_title', { length: 255 }).notNull(),
   historySectionContent: longtext('history_section_content').notNull(),
   valuesSectionTitle: varchar('values_section_title', { length: 255 }).notNull(),
+  reviewsSectionTitle: varchar('reviews_section_title', { length: 255 }).default('Ils recommandent Thierry Azur 06').notNull(),
+  reviewsSectionSubtitle: varchar('reviews_section_subtitle', { length: 255 }).default('Avis clients sur Google').notNull(),
   imageName: varchar('image_name', { length: 255 }),
   imageSize: float('image_size'),
   imageType: varchar('image_type', { length: 50 }),

@@ -310,7 +310,7 @@ onMounted(fetchCities);
 .title {
   font-size: 1.875rem;
   font-weight: 800;
-  color: #0f172a;
+  color: light-dark(#0f172a, #ffffff);
   display: flex;
   align-items: center;
   gap: 0.75rem;

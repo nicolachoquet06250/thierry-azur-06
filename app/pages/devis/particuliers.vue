@@ -1,4 +1,14 @@
 <script setup lang="ts">
+useSeoMeta({
+  twitterCard: 'summary',
+  twitterTitle: 'Thierry Azur 06 | Demande de devis pour les particuliers',
+  twitterDescription: 'Demandez un devis pour les particuliers.',
+  twitterImage: '/logo.png',
+  ogTitle: 'Thierry Azur 06 | Demande de devis pour les particuliers',
+  ogDescription: 'Demandez un devis pour les particuliers.',
+  ogImage: '/thierry-azur-06.png',
+  description: 'Demandez un devis pour les particuliers.'
+})
 </script>
 
 <template>

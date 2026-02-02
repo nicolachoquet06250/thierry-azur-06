@@ -1,4 +1,14 @@
 <script setup lang="ts">
+useSeoMeta({
+  twitterCard: 'summary',
+  twitterTitle: 'Thierry Azur 06 | Demande de devis pour les immeubles & copropriétés',
+  twitterDescription: 'Demandez un devis pour les immeubles & copropriétés',
+  twitterImage: '/logo.png',
+  ogTitle: 'Thierry Azur 06 | Demande de devis pour les immeubles & copropriétés',
+  ogDescription: 'Demandez un devis pour les immeubles & copropriétés',
+  ogImage: '/thierry-azur-06.png',
+  description: 'Demandez un devis pour les immeubles & copropriétés'
+})
 </script>
 
 <template>

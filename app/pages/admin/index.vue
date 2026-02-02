@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ArrowUpRight, CheckCircle2, Clock, MessageSquare, Users} from 'lucide-vue-next';
+import {ArrowUpRight, CheckCircle2, Clock, MessageSquare, Users, Star} from 'lucide-vue-next';
 
 definePageMeta({
   middleware: 'auth',
@@ -9,6 +9,9 @@ definePageMeta({
 const stats = ref({ contacts: 0, devis: 0 });
 const activities = ref<any[]>([]);
 const isLoadingActivities = ref(true);
+const currentPage = ref(1);
+const totalPages = ref(1);
+const itemsPerPage = 10;
 
 const fetchStats = async () => {
   try {
@@ -23,20 +26,42 @@ const fetchStats = async () => {
   }
 };
 
-const fetchActivities = async () => {
+const fetchActivities = async (page = 1) => {
   isLoadingActivities.value = true;
+  currentPage.value = page;
   try {
     const token = localStorage.getItem('auth_token');
-    const response = await $fetch('/api/admin/activities', {
+    const response = await $fetch<{activities: any[], total: number, totalPages: number}>('/api/admin/activities', {
+      params: {
+        page,
+        limit: itemsPerPage
+      },
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
-    activities.value = response as any[];
+    // On s'assure que response est bien un objet avec les propriétés attendues
+    if (response && response.activities) {
+      activities.value = response.activities;
+      totalPages.value = response.totalPages;
+    } else {
+      // Fallback au cas où le format de réponse serait différent
+      activities.value = Array.isArray(response) ? response : [];
+      totalPages.value = 1;
+    }
   } catch (err) {
     console.error('Failed to fetch activities', err);
   } finally {
     isLoadingActivities.value = false;
+  }
+};
+
+const handlePageChange = (page: number) => {
+  if (page >= 1 && page <= totalPages.value) {
+    fetchActivities(page);
+    // Scroll to activity section
+    const el = document.getElementById('activities-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   }
 };
 
@@ -117,6 +142,93 @@ onMounted(() => {
         </div>
       </NuxtLink>
 
+      <div style="grid-column: span 2;">
+        <!-- Dernières Activités Section -->
+        <div id="activities-section" :class="$style.activitySection">
+          <div :class="$style.activityHeader">
+            <div :class="$style.activityTitleWrapper">
+              <div :class="$style.activityIconWrapper">
+                <Clock :class="$style.activityIcon" />
+              </div>
+              <h3 :class="$style.activityTitle">Dernières Activités</h3>
+            </div>
+          </div>
+
+          <div v-if="isLoadingActivities" :class="$style.loadingState">
+            Chargement des activités...
+          </div>
+
+          <div v-else-if="activities.length === 0" :class="$style.emptyState">
+            <div :class="$style.emptyStateContent">
+              <div :class="$style.pulseIconWrapper">
+                <div :class="$style.pulseBg"></div>
+                <div :class="$style.pulseIconCenter">
+                  <Clock :class="$style.pulseIcon" />
+                </div>
+              </div>
+              <h4 :class="$style.emptyStateTitle">Aucune activité récente</h4>
+              <p :class="$style.emptyStateText">
+                Vos nouveaux messages et demandes de devis apparaîtront ici en temps réel dès qu'ils seront reçus.
+              </p>
+            </div>
+          </div>
+
+          <div v-else>
+            <div :class="$style.activityList">
+              <div v-for="activity in activities" :key="activity.type + activity.id" :class="$style.activityItem">
+                <div :class="[
+              $style.activityItemIcon,
+              activity.type === 'devis' ? $style.devisIcon : (activity.type === 'review' ? $style.reviewIcon : $style.contactIcon)
+            ]">
+                  <Users v-if="activity.type === 'devis'" :size="18" />
+                  <Star v-else-if="activity.type === 'review'" :size="18" />
+                  <MessageSquare v-else :size="18" />
+                </div>
+                <div :class="$style.activityItemContent">
+                  <div :class="$style.activityItemHeader">
+                    <span :class="$style.activityItemName">{{ activity.firstName }} {{ activity.lastName }}</span>
+                    <span :class="$style.activityItemDate">{{ formatDate(activity.createdAt) }}</span>
+                  </div>
+                  <div :class="$style.activityItemMeta">
+                <span :class="[
+                  $style.typeBadge,
+                  activity.type === 'devis' ? $style.devisBadge : (activity.type === 'review' ? $style.reviewBadge : $style.contactBadge)
+                ]">
+                  {{ activity.type === 'devis' ? 'Devis' : (activity.type === 'review' ? 'Avis' : 'Contact') }}
+                </span>
+                    <span :class="$style.activityItemSubject">{{ activity.subject }}</span>
+                  </div>
+                </div>
+                <NuxtLink :to="activity.type === 'devis' ? '/admin/devis' : (activity.type === 'review' ? '/admin/reviews' : '/admin/contact')" :class="$style.activityItemLink">
+                  <ArrowUpRight :size="18" />
+                </NuxtLink>
+              </div>
+            </div>
+
+            <!-- Pagination -->
+            <div v-if="totalPages > 1" :class="$style.pagination">
+              <button
+                  :disabled="currentPage === 1"
+                  @click="handlePageChange(currentPage - 1)"
+                  :class="$style.pageButton"
+              >
+                Précédent
+              </button>
+              <div :class="$style.pageInfo">
+                Page {{ currentPage }} sur {{ totalPages }}
+              </div>
+              <button
+                  :disabled="currentPage === totalPages"
+                  @click="handlePageChange(currentPage + 1)"
+                  :class="$style.pageButton"
+              >
+                Suivant
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Carte d'aide rapide ou Info -->
       <div :class="$style.darkCard">
         <div :class="$style.watermark">
@@ -130,62 +242,6 @@ onMounted(() => {
           <button :class="$style.darkCardButton" @click.prevent="handleContactSupport">
             Contacter le support
           </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Dernières Activités Section -->
-    <div :class="$style.activitySection">
-      <div :class="$style.activityHeader">
-        <div :class="$style.activityTitleWrapper">
-          <div :class="$style.activityIconWrapper">
-            <Clock :class="$style.activityIcon" />
-          </div>
-          <h3 :class="$style.activityTitle">Dernières Activités</h3>
-        </div>
-        <NuxtLink to="/admin/contact" :class="$style.viewAllButton">Tout voir</NuxtLink>
-      </div>
-
-      <div v-if="isLoadingActivities" :class="$style.loadingState">
-        Chargement des activités...
-      </div>
-
-      <div v-else-if="activities.length === 0" :class="$style.emptyState">
-        <div :class="$style.emptyStateContent">
-          <div :class="$style.pulseIconWrapper">
-            <div :class="$style.pulseBg"></div>
-            <div :class="$style.pulseIconCenter">
-              <Clock :class="$style.pulseIcon" />
-            </div>
-          </div>
-          <h4 :class="$style.emptyStateTitle">Aucune activité récente</h4>
-          <p :class="$style.emptyStateText">
-            Vos nouveaux messages et demandes de devis apparaîtront ici en temps réel dès qu'ils seront reçus.
-          </p>
-        </div>
-      </div>
-
-      <div v-else :class="$style.activityList">
-        <div v-for="activity in activities" :key="activity.type + activity.id" :class="$style.activityItem">
-          <div :class="[$style.activityItemIcon, activity.type === 'devis' ? $style.devisIcon : $style.contactIcon]">
-            <Users v-if="activity.type === 'devis'" :size="18" />
-            <MessageSquare v-else :size="18" />
-          </div>
-          <div :class="$style.activityItemContent">
-            <div :class="$style.activityItemHeader">
-              <span :class="$style.activityItemName">{{ activity.firstName }} {{ activity.lastName }}</span>
-              <span :class="$style.activityItemDate">{{ formatDate(activity.createdAt) }}</span>
-            </div>
-            <div :class="$style.activityItemMeta">
-              <span :class="[$style.typeBadge, activity.type === 'devis' ? $style.devisBadge : $style.contactBadge]">
-                {{ activity.type === 'devis' ? 'Devis' : 'Contact' }}
-              </span>
-              <span :class="$style.activityItemSubject">{{ activity.subject }}</span>
-            </div>
-          </div>
-          <NuxtLink :to="activity.type === 'devis' ? '/admin/devis' : '/admin/contact'" :class="$style.activityItemLink">
-            <ArrowUpRight :size="18" />
-          </NuxtLink>
         </div>
       </div>
     </div>
@@ -630,6 +686,11 @@ onMounted(() => {
   color: #059669;
 }
 
+.reviewIcon {
+  background-color: #fffbeb;
+  color: #d97706;
+}
+
 .activityItemContent {
   flex-grow: 1;
   min-width: 0;
@@ -683,6 +744,11 @@ onMounted(() => {
   color: #065f46;
 }
 
+.reviewBadge {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
 .activityItemSubject {
   font-size: 0.875rem;
   color: var(--text-main);
@@ -699,5 +765,43 @@ onMounted(() => {
 
 .activityItem:hover .activityItemLink {
   color: #64748b;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.pageButton {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pageButton:hover:not(:disabled) {
+  background-color: var(--accent);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.pageButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 0.875rem;
+  color: var(--text-main);
+  opacity: 0.8;
 }
 </style>

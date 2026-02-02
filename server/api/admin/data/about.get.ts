@@ -12,6 +12,8 @@ export default defineEventHandler(async () => {
       historySectionTitle: 'Notre Histoire',
       historySectionContent: 'Contenu par défaut de notre histoire...',
       valuesSectionTitle: 'Nos Valeurs',
+      reviewsSectionTitle: 'Ils recommandent Thierry Azur 06',
+      reviewsSectionSubtitle: 'Avis clients sur Google',
     });
     [record] = await db.select().from(about).limit(1);
   }

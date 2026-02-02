@@ -1,7 +1,7 @@
 import { verifyCode, sendMail } from '../utils/mail'
 import { render } from '@vue-email/render'
 import ContactEmail from '../../app/emails/templates/ContactEmail.vue'
-import { contacts, devisAsks } from '~~/server/database/schema'
+import { contacts, devisAsks, metadata } from '~~/server/database/schema'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
@@ -23,11 +23,10 @@ export default defineEventHandler(async (event) => {
   }
 
   const db = useDb()
+  const isDevis = objet.toLowerCase().includes('devis')
 
   // Enregistrer en base de données
   try {
-    const isDevis = objet.toLowerCase().includes('devis')
-    
     if (isDevis) {
       await db.insert(devisAsks).values({
         firstName: prenom,
@@ -63,9 +62,19 @@ export default defineEventHandler(async (event) => {
       message,
     }, {plainText: true})
 
+    // Récupérer les emails de destination depuis la bdd
+    const [meta] = await db.select()
+        .from(metadata)
+        .limit(1)
+    const destinationEmail = isDevis
+        ? meta!.devisEmail : meta!.contactEmail
+
+    const subject = (isDevis
+        ? 'Demande de devis ' : 'Contact ') + `de ${nom} ${prenom}: ${objet}`
+
     await sendMail({
-      to: process.env.CONTACT_EMAIL || 'admin@thierry-azure.fr',
-      subject: `Contact de ${nom} ${prenom}: ${objet}`,
+      to: destinationEmail,
+      subject,
       html, text
     })
     return { success: true }

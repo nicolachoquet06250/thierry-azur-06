@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Clock, MapPin, PhoneCall } from 'lucide-vue-next'
-import { onMounted, ref, computed, watch } from 'vue'
+import { onMounted, ref, computed, watch, onUnmounted } from 'vue'
 
 const { data: metadata } = await useFetch('/api/data/metadata')
 const { data: citiesData } = await useFetch('/api/data/cities')
@@ -70,14 +70,38 @@ onMounted(async () => {
     const map = L.map('map').setView([43.65, 7.15], 10)
     mapInstance.value = map
     
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const tileLayerUrl = isDark 
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+    let currentTileLayer: any = null
 
-    L.tileLayer(tileLayerUrl, {
-      attribution: '© OpenStreetMap contributors © CARTO'
-    }).addTo(map)
+    const updateTileLayer = (isDark: boolean) => {
+      const tileLayerUrl = isDark 
+        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+
+      if (currentTileLayer) {
+        map.removeLayer(currentTileLayer)
+      }
+
+      currentTileLayer = L.tileLayer(tileLayerUrl, {
+        attribution: '© OpenStreetMap contributors © CARTO'
+      }).addTo(map)
+    }
+
+    // Initial tile layer
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    updateTileLayer(mediaQuery.matches)
+
+    // Listen for theme changes
+    const themeListener = (e: MediaQueryListEvent) => {
+      updateTileLayer(e.matches)
+    }
+    mediaQuery.addEventListener('change', themeListener)
+
+    onUnmounted(() => {
+      mediaQuery.removeEventListener('change', themeListener)
+      if (mapInstance.value) {
+        mapInstance.value.remove()
+      }
+    })
 
     watch(cities, (newCities) => {
       if (newCities && mapInstance.value) {
@@ -114,11 +138,6 @@ onMounted(async () => {
     if (points.length > 0) {
       const bounds = L.latLngBounds(points)
       const isDesktop = window.innerWidth >= 768
-      
-      // Ajouter du padding pour compenser le clip-path
-      const padding: [number, number] = isDesktop 
-        ? [0, 150] // Plus de padding à gauche pour desktop
-        : [150, 0] // Plus de padding en haut pour mobile
         
       map.fitBounds(bounds, { 
         paddingTopLeft: isDesktop ? [window.innerWidth * 0.1, 20] : [20, window.innerHeight * 0.1],

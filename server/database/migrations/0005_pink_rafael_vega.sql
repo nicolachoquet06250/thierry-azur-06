@@ -1,0 +1,1 @@
+ALTER TABLE `notes` ADD `approved` boolean DEFAULT false NOT NULL;

@@ -29,6 +29,8 @@ export default defineEventHandler(async (event) => {
     if (field.name === 'historySectionTitle') updateData.historySectionTitle = field.data.toString();
     if (field.name === 'historySectionContent') updateData.historySectionContent = field.data.toString();
     if (field.name === 'valuesSectionTitle') updateData.valuesSectionTitle = field.data.toString();
+    if (field.name === 'reviewsSectionTitle') updateData.reviewsSectionTitle = field.data.toString();
+    if (field.name === 'reviewsSectionSubtitle') updateData.reviewsSectionSubtitle = field.data.toString();
 
     if (field.name === 'imageAbout' && field.filename) {
       updateData.imageName = field.filename;

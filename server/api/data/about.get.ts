@@ -5,6 +5,8 @@ export default defineEventHandler(async (): Promise<{
   historySectionTitle: string,
   historySectionContent: string,
   valuesSectionTitle: string,
+  reviewsSectionTitle: string,
+  reviewsSectionSubtitle: string,
   imageContent?: string|null
 }> => {
   const db = useDb();
@@ -23,5 +25,7 @@ export default defineEventHandler(async (): Promise<{
     historySectionTitle: 'Notre Histoire',
     historySectionContent: 'Contenu par défaut de notre histoire...',
     valuesSectionTitle: 'Nos Valeurs',
+    reviewsSectionTitle: 'Ils recommandent Thierry Azur 06',
+    reviewsSectionSubtitle: 'Avis clients sur Google',
   };
 });

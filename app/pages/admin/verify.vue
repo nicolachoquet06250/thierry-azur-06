@@ -115,7 +115,7 @@ const goBack = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f3f4f6;
+  background-color: var(--bg-main);
   position: relative;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
@@ -132,13 +132,13 @@ const goBack = () => {
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.4;
+  opacity: 0.2;
 }
 
 .circle1 {
   width: 400px;
   height: 400px;
-  background: var(--primary, #0077cc);
+  background: var(--primary);
   top: -100px;
   right: -100px;
 }
@@ -146,7 +146,7 @@ const goBack = () => {
 .circle2 {
   width: 300px;
   height: 300px;
-  background: var(--secondary, #005fa3);
+  background: var(--secondary);
   bottom: -50px;
   left: -50px;
 }
@@ -170,7 +170,8 @@ const goBack = () => {
   left: 24px;
   background: none;
   border: none;
-  color: #64748b;
+  color: var(--text-main);
+  opacity: 0.7;
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
@@ -181,8 +182,9 @@ const goBack = () => {
 }
 
 .backButton:hover {
-  background: #f1f5f9;
-  color: var(--primary, #0077cc);
+  background: var(--accent);
+  color: var(--primary);
+  opacity: 1;
 }
 
 .verifyHeader {
@@ -193,24 +195,25 @@ const goBack = () => {
 .logoContainer {
   width: 64px;
   height: 64px;
-  background: var(--accent, #e6f2ff);
+  background: var(--accent);
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 16px;
-  color: var(--primary, #0077cc);
+  color: var(--primary);
 }
 
 .verifyHeader h2 {
   font-size: 24px;
   font-weight: 700;
-  color: var(--text-dark, #1a365d);
+  color: var(--text-main);
   margin-bottom: 8px;
 }
 
 .verifyHeader p {
-  color: #64748b;
+  color: var(--text-main);
+  opacity: 0.7;
   font-size: 14px;
 }
 
@@ -230,13 +233,13 @@ const goBack = () => {
 .formGroup label {
   font-size: 14px;
   font-weight: 500;
-  color: #475569;
+  color: var(--text-main);
 }
 
 .codeInput {
   width: 100%;
   padding: 16px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--border-color);
   border-radius: 12px;
   font-size: 32px;
   font-weight: 700;
@@ -244,19 +247,20 @@ const goBack = () => {
   letter-spacing: 0.5em;
   transition: all 0.2s;
   outline: none;
-  background: white;
-  color: var(--text-dark, #1a365d);
+  background: var(--bg-main);
+  color: var(--text-main);
 }
 
 .codeInput:focus {
-  border-color: var(--primary, #0077cc);
+  border-color: var(--primary);
   box-shadow: 0 0 0 4px rgba(0, 119, 204, 0.1);
 }
 
 .codeInput::placeholder {
   letter-spacing: normal;
   font-size: 24px;
-  color: #cbd5e1;
+  color: var(--text-main);
+  opacity: 0.3;
 }
 
 .verifyButton {
@@ -269,23 +273,14 @@ const goBack = () => {
   width: 100%;
 }
 
-.errorMessage {
-  background-color: #fef2f2;
-  color: #dc2626;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  text-align: center;
-  border: 1px solid #fee2e2;
-}
-
 .verifyFooter {
   margin-top: 32px;
   text-align: center;
 }
 
 .verifyFooter p {
-  color: #94a3b8;
+  color: var(--text-main);
+  opacity: 0.5;
   font-size: 13px;
   line-height: 1.5;
 }
@@ -297,13 +292,6 @@ const goBack = () => {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
 }
 
 @media (max-width: 480px) {

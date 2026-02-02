@@ -4,54 +4,101 @@ import { ref, computed } from 'vue'
 
 const { data: about } = await useFetch('/api/data/about')
 const { data: cities } = await useFetch('/api/data/cities')
+const { data: dbReviews, refresh: refreshReviews } = await useFetch('/api/data/reviews')
 
 const rating = ref(5)
-
-const title = computed(() => {
-  return about.value?.valuesSectionTitle || 'Ils recommandent Thierry Azur 06'
+const form = ref({
+  fullName: '',
+  email: '',
+  type: 'professionnel',
+  cityId: null,
+  message: ''
 })
 
-const reviews = [
-  {
-    name: 'Thierry L.',
-    image: 'https://i.pravatar.cc/150?u=thierry',
-    text: 'Un service impeccable et professionnel. Mon appartement n\'a jamais été aussi propre. Je recommande vivement !',
-    rating: 5
-  },
-  {
-    name: 'Elena M.',
-    image: 'https://i.pravatar.cc/150?u=elena',
-    text: 'Thierry est ponctuel, efficace et très sympathique. Le travail est soigné dans les moindres détails.',
-    rating: 5
+const isSubmitting = ref(false)
+const submitSuccess = ref(false)
+const submitError = ref('')
+
+const title = computed(() =>
+    about.value.reviewsSectionTitle || 'Ils recommandent Thierry Azur 06')
+
+const sectionSubtitle = computed(() =>
+    about.value.reviewsSectionSubtitle || 'Avis clients sur Google')
+
+const sectionRating = computed(() => {
+  if (!dbReviews.value || dbReviews.value.length === 0) {
+    return 5
   }
-]
+  const sum = dbReviews.value.reduce((acc, r) => acc + r.note, 0)
+  return Math.round((sum / dbReviews.value.length) * 10) / 10
+})
+
+const displayRating = computed(() => Math.round(sectionRating.value))
+
+const reviews = computed(() => (dbReviews.value || []).map((r) => ({
+  name: r.fullName,
+  image: `https://placehold.co/150?text=${r.fullName.split(' ')[0].substring(0, 1).toUpperCase()}${r.fullName.split(' ')[1].substring(0, 1).toUpperCase()}`,
+  text: r.message || '',
+  rating: r.note
+})))
+
+const handleSubmit = async () => {
+  isSubmitting.value = true
+  submitError.value = ''
+  
+  try {
+    await $fetch('/api/reviews', {
+      method: 'POST',
+      body: {
+        ...form.value,
+        note: rating.value
+      }
+    })
+    await refreshReviews()
+    submitSuccess.value = true
+    form.value = {
+      fullName: '',
+      email: '',
+      type: 'professionnel',
+      cityId: null,
+      message: ''
+    }
+    rating.value = 5
+  } catch (e) {
+    submitError.value = e.data?.statusMessage || "Erreur lors de l'envoi de votre avis."
+  } finally {
+    isSubmitting.value = false
+  }
+}
 </script>
 
 <template>
   <section id="avis" :class="$style.footerSection">
     <!-- Footer/Bottom shape background -->
-    <div :class="[$style.shapeBackground, 'bg-footer-shape']"></div>
+    <div :class="[$style.shapeBackground, 'bg-footer-shape']"/>
 
     <div :class="$style.container">
       <div :class="$style.header">
         <h2 :class="$style.title">{{ title }}</h2>
         <div :class="$style.ratingWrapper">
-          <Star v-for="i in 5" :key="i" :class="$style.starIcon" />
-          <span :class="$style.ratingValue">5/5</span>
-          <span :class="$style.ratingSource">- Avis clients sur Google</span>
+          <Star v-for="i in displayRating" :key="i" :class="$style.starIcon" />
+          <Star v-for="i in 5 - displayRating" :key="i" :class="[$style.starIcon, $style.empty]" />
+          <span :class="$style.ratingValue">{{ sectionRating }}/5</span>
+          <span :class="$style.ratingSource">- {{ sectionSubtitle }}</span>
         </div>
       </div>
 
-      <div :class="$style.grid">
+      <div :class="[$style.grid, { [$style.noReviews]: reviews.length === 0 }]">
         <!-- Testimonials -->
-        <div :class="$style.testimonials">
+        <div v-if="reviews.length > 0" :class="$style.testimonials">
           <div v-for="review in reviews" :key="review.name" :class="$style.reviewCard">
             <div :class="$style.reviewHeader">
               <img :src="review.image" :alt="review.name" :class="$style.reviewAvatar" />
               <div>
                 <h4 :class="$style.reviewName">{{ review.name }}</h4>
                 <div :class="$style.reviewStars">
-                  <Star v-for="i in 5" :key="i" :class="$style.smallStarIcon" />
+                  <Star v-for="i in Math.floor(review.rating)" :key="i" :class="$style.smallStarIcon" />
+                  <Star v-for="i in 5 - Math.floor(review.rating)" :key="i" :class="[$style.smallStarIcon, $style.empty]" />
                 </div>
               </div>
             </div>
@@ -60,11 +107,16 @@ const reviews = [
         </div>
 
         <!-- Contact Form Card -->
-        <div id="contact" :class="$style.contactWrapper">
+        <div id="contact" :class="[$style.contactWrapper, { [$style.centered]: reviews.length === 0 }]">
           <div :class="$style.contactCard">
-            <h3 :class="$style.contactTitle">Donne mon avis</h3>
+            <h3 :class="$style.contactTitle">Donner mon avis</h3>
             
-            <form :class="$style.form">
+            <div v-if="submitSuccess" :class="$style.successMsg">
+              <p>Merci pour votre avis ! Il sera publié après modération.</p>
+              <button @click="submitSuccess = false" :class="$style.submitButton">Envoyer un autre avis</button>
+            </div>
+
+            <form v-else :class="$style.form" @submit.prevent="handleSubmit">
               <div :class="$style.ratingInputGroup">
                 <label :class="$style.label">Votre note</label>
                 <!-- Étoiles pour desktop -->
@@ -93,49 +145,51 @@ const reviews = [
               </div>
 
               <div>
-                <label :class="$style.label">Nom</label>
-                <input type="text" :class="$style.input" placeholder="Votre nom" />
+                <label :class="$style.label">Nom complet</label>
+                <input type="text" v-model="form.fullName" :class="$style.input" placeholder="Votre nom" required />
               </div>
               
               <div>
                 <label :class="$style.label">Email</label>
-                <input type="email" :class="$style.input" placeholder="Votre email" />
+                <input type="email" v-model="form.email" :class="$style.input" placeholder="Votre email" required />
               </div>
               
               <div :class="$style.checkboxGroup">
                 <label :class="$style.checkboxLabel">
-                  <input type="radio" name="message-type" :class="$style.checkbox" />
+                  <input type="radio" v-model="form.type" value="particulier" :class="$style.checkbox" />
                   <span :class="$style.checkboxText">Particulier</span>
                 </label>
                 <label :class="$style.checkboxLabel">
-                  <input type="radio" name="message-type" :class="$style.checkbox" checked />
+                  <input type="radio" v-model="form.type" value="professionnel" :class="$style.checkbox" />
                   <span :class="$style.checkboxText">Professionnel</span>
                 </label>
                 <label :class="$style.checkboxLabel">
-                  <input type="radio" name="message-type" :class="$style.checkbox" checked />
+                  <input type="radio" v-model="form.type" value="copropriete" :class="$style.checkbox" />
                   <span :class="$style.checkboxText">Copropriété</span>
                 </label>
                 <label :class="$style.checkboxLabel">
-                  <input type="radio" name="message-type" :class="$style.checkbox" checked />
+                  <input type="radio" v-model="form.type" value="immeuble" :class="$style.checkbox" />
                   <span :class="$style.checkboxText">Immeuble</span>
                 </label>
               </div>
 
               <div>
                 <label :class="$style.label">Ville</label>
-                <select :class="$style.input">
-                  <option v-for="city in cities" :key="city.id">{{ city.name }}</option>
-                  <option>Autres</option>
+                <select v-model="form.cityId" :class="$style.input" required>
+                  <option :value="null" disabled>Sélectionnez une ville</option>
+                  <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
                 </select>
               </div>
 
               <div>
                 <label :class="$style.label">Message (optionnel)</label>
-                <textarea :class="$style.textarea" placeholder="Votre message..."></textarea>
+                <textarea v-model="form.message" :class="$style.textarea" placeholder="Votre message..."></textarea>
               </div>
 
-              <button type="submit" :class="$style.submitButton">
-                Donner mon avis
+              <div v-if="submitError" :class="$style.errorMsg">{{ submitError }}</div>
+
+              <button type="submit" :class="$style.submitButton" :disabled="isSubmitting">
+                {{ isSubmitting ? 'Envoi...' : 'Donner mon avis' }}
               </button>
               
               <p :class="$style.disclaimer">
@@ -201,16 +255,20 @@ const reviews = [
   height: 1.25rem;
   fill: #facc15; /* fill-yellow-400 */
   color: #facc15; /* text-yellow-400 */
+
+  &.empty {
+    fill: none;
+  }
 }
 
 .ratingValue {
   margin-left: 0.5rem;
   font-weight: 700;
-  color: var(--text-main); /* text-gray-700 */
+  color: var(--text-main);
 }
 
 .ratingSource {
-  color: #9ca3af; /* text-gray-400 */
+  color: var(--text-main);
   margin-left: 0.25rem;
 }
 
@@ -220,8 +278,13 @@ const reviews = [
   items: start;
 }
 
-.testimonials {
+.grid.noReviews {
   display: flex;
+  justify-content: center;
+}
+
+.testimonials {
+  display: grid;
   flex-wrap: wrap;
   gap: 1.5rem;
 }
@@ -232,14 +295,14 @@ const reviews = [
   border-radius: 1rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   border: 1px solid var(--border-color);
-  max-width: 300px;
+  width: 100%;
   height: min-content;
   min-height: 300px;
 }
 
 @media (min-width: 1024px) and (max-width: 1279px){
-  .reviewCard {
-    min-width: 100%;
+  .testimonials {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -272,17 +335,27 @@ const reviews = [
   height: 0.75rem;
   fill: #facc15;
   color: #facc15;
+
+  &.empty {
+    fill: none;
+  }
 }
 
 .reviewText {
-  color: var(--text-main); /* text-gray-600 */
-  opacity: 0.9;
+  color: var(--text-main);
   font-style: italic;
   line-height: 1.625;
 }
 
 .contactWrapper {
   /* lg:col-span-5 */
+}
+
+.centered {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+  width: 100%;
 }
 
 .contactCard {
@@ -299,6 +372,22 @@ const reviews = [
   color: var(--primary);
   margin-bottom: 1.5rem;
   text-align: center;
+}
+
+.successMsg {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.errorMsg {
+  color: #ef4444;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .form {
@@ -324,6 +413,11 @@ const reviews = [
   transition: all 0.2s;
   outline: none;
   color: var(--text-main);
+}
+
+.input::placeholder, .textarea::placeholder {
+  color: var(--text-main);
+  opacity: 0.85;
 }
 
 .input:focus, .textarea:focus {
@@ -354,9 +448,9 @@ const reviews = [
 .checkbox {
   width: 1rem;
   height: 1rem;
-  color: #3b82f6;
+  color: #2563eb;
   border-radius: 0.25rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
 }
 
 .checkboxText {
@@ -383,9 +477,9 @@ const reviews = [
 }
 
 .disclaimer {
-  font-size: 10px;
+  font-size: 11px;
   text-align: center;
-  color: #9ca3af;
+  color: var(--text-main);
   margin-top: 1rem;
   line-height: 1.25;
 }
@@ -417,7 +511,8 @@ const reviews = [
 .formStarIcon {
   width: 1.5rem;
   height: 1.5rem;
-  color: #d1d5db; /* Gray 300 */
+  color: var(--text-main);
+  opacity: 0.3;
   fill: none;
   transition: all 0.2s;
 }
@@ -425,6 +520,7 @@ const reviews = [
 .starButton.active .formStarIcon {
   color: #facc15; /* Yellow 400 */
   fill: #facc15;
+  opacity: 1;
 }
 
 .desktopOnly {

@@ -3,15 +3,12 @@ import { MapPin, Phone, Mail, ChevronRight } from 'lucide-vue-next'
 
 const { data: metadata } = await useFetch('/api/data/metadata')
 
-const phone = computed(() => metadata.value?.phone || import.meta.env.VITE_PHONE)
-const email = computed(() => metadata.value?.contactEmail || import.meta.env.VITE_EMAIL)
-
 const handleCall = () => {
-  window.location.href = `tel:${phone.value}`
+  window.location.href = `tel:${metadata.value.phone}`
 }
 
 const formattedPhone = computed(() => {
-  const p = phone.value
+  const p = metadata.value.phone
   if (p.startsWith('+')) {
     return p.replace(/\+(\d{2})(\d)(\d{2})(\d{2})(\d{2})(\d{2})/, '+$1 $2 $3 $4 $5 $6')
   }
@@ -87,7 +84,7 @@ const formattedPhone = computed(() => {
             <li :class="$style.contactItem">
               <Mail :class="$style.contactIcon" />
               <NuxtLink to="/contact" :class="$style.contactLink">
-                {{ email }}
+                {{ metadata.contactEmail }}
               </NuxtLink>
             </li>
             <li :class="$style.contactItem">
@@ -161,7 +158,7 @@ const formattedPhone = computed(() => {
 }
 
 .brandDesc {
-  color: #94a3b8; /* Slate 400 */
+  color: #cbd5e1; /* Slate 300 */
   line-height: 1.6;
   max-width: 24rem;
 }
@@ -201,7 +198,7 @@ const formattedPhone = computed(() => {
 }
 
 .link {
-  color: #94a3b8;
+  color: #cbd5e1;
   text-decoration: none;
   transition: all 0.3s ease;
   display: flex;
@@ -225,7 +222,7 @@ const formattedPhone = computed(() => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: #94a3b8;
+  color: #cbd5e1;
 }
 
 .contactIcon {
@@ -264,7 +261,7 @@ const formattedPhone = computed(() => {
 
 .copyright {
   font-size: 0.875rem;
-  color: #64748b;
+  color: #94a3b8;
 }
 
 .bottomInfo {
@@ -275,7 +272,7 @@ const formattedPhone = computed(() => {
 
 .developer {
   font-size: 0.75rem;
-  color: #475569;
+  color: #94a3b8;
 }
 
 .devLink {
@@ -286,7 +283,7 @@ const formattedPhone = computed(() => {
 }
 
 .devLink:hover {
-  color: #94a3b8;
+  color: white;
 }
 
 .socialLinks {
@@ -298,14 +295,14 @@ const formattedPhone = computed(() => {
 }
 
 .socialIcon {
-  color: #475569;
+  color: #94a3b8;
   transition: color 0.3s ease;
   display: flex;
   align-items: center;
 }
 
 .socialIcon:hover {
-  color: #94a3b8;
+  color: white;
 }
 
 .legalLinks {
@@ -316,16 +313,16 @@ const formattedPhone = computed(() => {
 }
 
 .legalLink {
-  color: #64748b;
+  color: #94a3b8;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .legalLink:hover {
-  color: #94a3b8;
+  color: white;
 }
 
 .separator {
-  color: #334155;
+  color: #475569;
 }
 </style>

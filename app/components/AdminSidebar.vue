@@ -16,6 +16,7 @@ const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Données Site', href: '/admin/data', icon: Database },
   { name: 'Villes', href: '/admin/cities', icon: MapPin },
+  { name: 'Avis', href: '/admin/reviews', icon: MessageSquare },
   { name: 'Contacts', href: '/admin/contact', icon: MessageSquare },
   { name: 'Devis', href: '/admin/devis', icon: Users },
 ];

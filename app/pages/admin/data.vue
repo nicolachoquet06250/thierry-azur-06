@@ -46,6 +46,8 @@ const about = ref({
   historySectionTitle: '',
   historySectionContent: '',
   valuesSectionTitle: '',
+  reviewsSectionTitle: '',
+  reviewsSectionSubtitle: '',
   imageContent: null as any
 });
 
@@ -127,6 +129,8 @@ const saveAbout = async () => {
     formData.append('historySectionTitle', about.value.historySectionTitle);
     formData.append('historySectionContent', about.value.historySectionContent);
     formData.append('valuesSectionTitle', about.value.valuesSectionTitle);
+    formData.append('reviewsSectionTitle', about.value.reviewsSectionTitle);
+    formData.append('reviewsSectionSubtitle', about.value.reviewsSectionSubtitle);
 
     if (files.value.about) {
       formData.append('imageAbout', files.value.about);
@@ -324,6 +328,18 @@ onMounted(() => {
               </div>
             </div>
             <div :class="$style.formGroup">
+              <label :class="$style.label">Titre Section Avis</label>
+              <div :class="$style.inputWrapper">
+                <input v-model="about.reviewsSectionTitle" type="text" :class="$style.input" />
+              </div>
+            </div>
+            <div :class="$style.formGroup">
+              <label :class="$style.label">Sous-titre Section Avis</label>
+              <div :class="$style.inputWrapper">
+                <input v-model="about.reviewsSectionSubtitle" type="text" :class="$style.input" />
+              </div>
+            </div>
+            <div :class="$style.formGroup">
               <label :class="$style.label">Image À Propos</label>
               <div :class="$style.imageUploadCard">
                 <div v-if="previews.about" :class="$style.imagePreview">
@@ -445,7 +461,7 @@ onMounted(() => {
 .title {
   font-size: 1.875rem;
   font-weight: 800;
-  color: #0f172a;
+  color: light-dark(#0f172a, #ffffff);
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -453,10 +469,14 @@ onMounted(() => {
 
 .titleIcon {
   background-color: #2563eb;
-  padding: 0.5rem;
   border-radius: 0.75rem;
   color: #ffffff;
   box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .subtitle {

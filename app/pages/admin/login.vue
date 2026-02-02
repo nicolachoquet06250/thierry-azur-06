@@ -110,7 +110,7 @@ const login = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f3f4f6;
+  background-color: var(--bg-main);
   position: relative;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
@@ -127,13 +127,13 @@ const login = async () => {
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.4;
+  opacity: 0.2;
 }
 
 .circle1 {
   width: 400px;
   height: 400px;
-  background: var(--primary, #0077cc);
+  background: var(--primary);
   top: -100px;
   right: -100px;
 }
@@ -141,7 +141,7 @@ const login = async () => {
 .circle2 {
   width: 300px;
   height: 300px;
-  background: var(--secondary, #005fa3);
+  background: var(--secondary);
   bottom: -50px;
   left: -50px;
 }
@@ -166,24 +166,25 @@ const login = async () => {
 .logoContainer {
   width: 64px;
   height: 64px;
-  background: var(--accent, #e6f2ff);
+  background: var(--accent);
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 16px;
-  color: var(--primary, #0077cc);
+  color: var(--primary);
 }
 
 .loginHeader h2 {
   font-size: 24px;
   font-weight: 700;
-  color: var(--text-dark, #1a365d);
+  color: var(--text-main);
   margin-bottom: 8px;
 }
 
 .loginHeader p {
-  color: #64748b;
+  color: var(--text-main);
+  opacity: 0.7;
   font-size: 14px;
 }
 
@@ -202,7 +203,7 @@ const login = async () => {
 .formGroup label {
   font-size: 14px;
   font-weight: 500;
-  color: #475569;
+  color: var(--text-main);
   margin-left: 4px;
 }
 
@@ -215,23 +216,25 @@ const login = async () => {
 .inputIcon {
   position: absolute;
   left: 12px;
-  color: #94a3b8;
+  color: var(--text-main);
+  opacity: 0.5;
   pointer-events: none;
 }
 
 .inputWrapper input {
   width: 100%;
   padding: 12px 12px 12px 40px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   font-size: 15px;
   transition: all 0.2s;
   outline: none;
-  background: white;
+  background: var(--bg-main);
+  color: var(--text-main);
 }
 
 .inputWrapper input:focus {
-  border-color: var(--primary, #0077cc);
+  border-color: var(--primary);
   box-shadow: 0 0 0 4px rgba(0, 119, 204, 0.1);
 }
 
@@ -246,16 +249,6 @@ const login = async () => {
   width: 100%;
 }
 
-.errorMessage {
-  background-color: #fef2f2;
-  color: #dc2626;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  text-align: center;
-  border: 1px solid #fee2e2;
-}
-
 .animateSpin {
   animation: spin 1s linear infinite;
 }
@@ -263,13 +256,6 @@ const login = async () => {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
 }
 
 @media (max-width: 480px) {

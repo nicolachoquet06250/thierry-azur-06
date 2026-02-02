@@ -186,7 +186,7 @@ onMounted(fetchDevis);
 .title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #0f172a;
+  color: light-dark(#0f172a, #ffffff);
 }
 
 .subtitle {
