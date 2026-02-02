@@ -23,7 +23,7 @@ const heroImage = computed(() => metadata.value?.imageHeroContent)
       <div :class="$style.contentWrapper">
         <!-- Text Content -->
         <div :class="$style.content">
-          <h1 :class="$style.title">
+          <h1 :class="$style.title" style="margin-top: 0;">
             Ménage pro & particulier.<br/>
             <span :class="$style.titleAccent">Finitions impeccables.</span>
           </h1>
@@ -99,7 +99,7 @@ const heroImage = computed(() => metadata.value?.imageHeroContent)
   margin-right: auto;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 8rem; /* Increased to account for fixed header */
+  padding-top: 5rem; /* Increased to account for fixed header */
   position: relative;
   z-index: 10;
 }
