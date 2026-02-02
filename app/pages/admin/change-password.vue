@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Lock, Loader2, KeyRound, ShieldCheck } from 'lucide-vue-next';
 
-// definePageMeta({
-//   layout: 'admin'
-// });
+definePageMeta({
+  layout: 'admin'
+});
 
 const newPassword = ref('');
 const confirmPassword = ref('');
@@ -228,6 +228,7 @@ const changePassword = async () => {
 <style module>
 .changePasswordPage {
   min-height: calc(100vh - 120px);
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
