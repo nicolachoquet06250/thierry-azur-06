@@ -16,7 +16,7 @@ const services = [
   {
     title: 'Professionnels',
     icon: Building2,
-    items: ['Bureaux / locaux', 'Sanitaires', 'Points de contact'],
+    items: ['Bureaux', 'locaux', 'Sanitaires'],
     buttonText: 'Demander un devis',
     link: '/devis/professionnels'
   },
