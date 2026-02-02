@@ -4,13 +4,11 @@ import { Check } from 'lucide-vue-next'
 const { data: metadata } = await useFetch('/api/data/metadata')
 
 const handleCall = () => {
-  const phone = metadata.value?.phone || import.meta.env.VITE_PHONE
+  const phone = metadata.value?.phone
   window.location.href = `tel:${phone}`
 }
 
-const heroImage = computed(() => {
-  return metadata.value?.imageHeroContent || '/img/hero_background.png'
-})
+const heroImage = computed(() => metadata.value?.imageHeroContent)
 </script>
 
 <template>

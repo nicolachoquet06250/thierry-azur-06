@@ -5,13 +5,9 @@ import { onMounted, ref, computed, watch, onUnmounted } from 'vue'
 const { data: metadata } = await useFetch('/api/data/metadata')
 const { data: citiesData } = await useFetch('/api/data/cities')
 
-const zonesImage = computed(() => {
-  return metadata.value?.imageZonesContent || '/img/zones-intervention.png'
-})
+const zonesImage = computed(() => metadata.value?.imageZonesContent)
 
-const schedules = computed(() => {
-  return metadata.value?.schedules || 'Lun - Ven - 8h - 19h'
-})
+const schedules = computed(() => metadata.value?.schedules)
 
 const cities = computed(() => {
   return citiesData.value || []

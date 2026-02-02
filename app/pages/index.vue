@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const { data: metadata } = await useFetch('/api/data/metadata')
-const defaultDesc = 'Ménage pro & particulier. Finitions impeccables. Pour particuliers, professionnels, immeubles, copropriétés...'
-const description = computed(() => metadata.value?.description || defaultDesc)
+const description = computed(() => metadata.value?.description)
 
 useSeoMeta({
   twitterCard: 'summary',

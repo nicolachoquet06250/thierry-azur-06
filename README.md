@@ -91,12 +91,10 @@ SMTP_PORT=587
 SMTP_SECURE=true
 SMTP_USER=votre_utilisateur_smtp
 SMTP_PASS=votre_mot_de_passe_smtp
-SMTP_FROM="Nom <votre_email@exemple.com>"
+SMTP_FROM="votre_email@exemple.com"
+APP_NAME=Nom
 
-CONTACT_EMAIL=email de contact
-VITE_EMAIL=email de contact
 VITE_SUPPORT_EMAIL=email dev
-VITE_PHONE=phone
 ```
 
 ### Initialisation

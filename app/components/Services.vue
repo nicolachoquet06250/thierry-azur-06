@@ -3,9 +3,7 @@ import { Check, Home, Building2, Building } from 'lucide-vue-next'
 
 const { data: about } = await useFetch('/api/data/about')
 
-const subtitle = computed(() => {
-  return about.value?.subtitle || 'Pour particuliers, professionnels, immeubles et copropriétés.'
-})
+const subtitle = computed(() => about.value?.subtitle)
 
 const services = [
   {

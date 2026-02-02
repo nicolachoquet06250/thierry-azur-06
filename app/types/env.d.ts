@@ -6,16 +6,19 @@ declare global {
     const defineNuxtSchema: (schema: SchemaDefinition) => SchemaDefinition
 
     interface ImportMetaEnv {
-        CONTACT_EMAIL: string
         SMTP_HOST: string
         SMTP_PORT: string
         SMTP_SECURE: string|boolean
         SMTP_USER: string
         SMTP_PASS: string
+        SMTP_FROM: string
+        APP_NAME: string
 
-        VITE_PHONE: string
-        VITE_EMAIL: string
         VITE_SUPPORT_EMAIL: string
+
+        DATABASE_URL: string
+
+        JWT_SECRET: string
     }
 
     interface ImportMeta {
