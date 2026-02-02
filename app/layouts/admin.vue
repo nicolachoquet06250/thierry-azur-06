@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.layout">
+  <div :class="[$style.layout, {[$style.login]: $route.path === '/admin/login'}]">
     <AdminSidebar />
     <div :class="$style.mainContent">
       <AdminHeader />
@@ -25,6 +25,10 @@ import ConfirmModal from '~/components/ConfirmModal.vue';
   background-color: var(--bg-main); /* slate-50 */
   min-height: 100vh;
   isolation: isolate;
+
+  &.login {
+    display: block;
+  }
 }
 
 .mainContent {
