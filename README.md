@@ -105,7 +105,5 @@ Pour créer le premier utilisateur administrateur :
 
 1. Assurez-vous que les variables d'environnement sont bien configurées.
 2. Lancez les migrations de la base de données : `npm run db:push`
-3. Exécutez le script de création d'utilisateur (vous pouvez modifier l'email et le mot de passe dans `seed-user.ts`) :
-   ```bash
-   npx tsx seed-user.ts
-   ```
+3. Rentrer manuellement en base de données le premier admin
+   1. Pour le mot de passe, utilisez : https://bcrypt-generator.com/
