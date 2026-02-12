@@ -69,6 +69,7 @@ const heroImage = computed(() => metadata.value?.imageHeroContent)
 .hero {
   position: relative;
   min-height: 700px;
+  height: 100vh;
   display: flex;
   align-items: center;
   overflow: hidden;
