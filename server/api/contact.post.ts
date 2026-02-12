@@ -75,7 +75,8 @@ export default defineEventHandler(async (event) => {
     await sendMail({
       to: destinationEmail,
       subject,
-      html, text
+      html, text,
+      type: isDevis ? 'devis' : 'contact'
     })
     return { success: true }
   } catch (error) {

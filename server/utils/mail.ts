@@ -2,12 +2,21 @@ import nodemailer from 'nodemailer'
 
 // Note: Pour la démonstration, on utilise des variables d'environnement
 // ou des valeurs par défaut (à configurer en production)
-const transporter = nodemailer.createTransport({
+const transporterContact = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'localhost',
   port: parseInt(process.env.SMTP_PORT || '1025'),
   secure: process.env.SMTP_SECURE === 'true',
-  auth: process.env.SMTP_USER ? {
-    user: process.env.SMTP_USER,
+  auth: process.env.SMTP_USER_CONTACT ? {
+    user: process.env.SMTP_USER_CONTACT,
+    pass: process.env.SMTP_PASS
+  } : undefined
+})
+const transporterDevis = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'localhost',
+  port: parseInt(process.env.SMTP_PORT || '1025'),
+  secure: process.env.SMTP_SECURE === 'true',
+  auth: process.env.SMTP_USER_DEVIS ? {
+    user: process.env.SMTP_USER_DEVIS,
     pass: process.env.SMTP_PASS
   } : undefined
 })
@@ -36,9 +45,11 @@ export const verifyCode = (email: string, code: string) => {
   return isValid
 }
 
-export const sendMail = async (options: { to: string, subject: string, html: string, text?: string }) => {
-  return transporter.sendMail({
-    from: '"Thierry Azur 06" <no-reply@thierry-azure.fr>',
+export const sendMail = async (options: { to: string, subject: string, html: string, text?: string, type: 'contact'|'devis' }) => {
+  options.type ??= 'contact';
+  
+  return (options.type === 'contact' ? transporterContact : transporterDevis).sendMail({
+    from: `"${process.env.APP_NAME}" <${process.env[`SMTP_USER_${options.type.toUpperCase()}`]}>`,
     ...options
   })
 }

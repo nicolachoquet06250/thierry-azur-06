@@ -14,9 +14,9 @@ export default defineNuxtConfig({
     jwtSecret: process.env.JWT_SECRET || 'default_secret_change_me',
     smtpHost: process.env.SMTP_HOST,
     smtpPort: process.env.SMTP_PORT,
-    smtpUser: process.env.SMTP_USER,
+    smtpUser: process.env.SMTP_USER_CONTACT,
     smtpPass: process.env.SMTP_PASS,
-    smtpFrom: `${process.env.APP_NAME}<${process.env.SMTP_FROM}>`,
+    smtpFrom: `${process.env.APP_NAME}<${process.env.SMTP_USER_CONTACT}>`,
   },
 
   // @ts-ignore

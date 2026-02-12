@@ -21,10 +21,10 @@ jobs:
           
           echo "SMTP_HOST=${{secrets.SMTP_HOST}}" >> .env
           echo "SMTP_PORT=465" >> .env
-          echo "SMTP_USER=${{secrets.SMTP_USER}}" >> .env
+          echo "SMTP_USER_CONTACT=${{secrets.SMTP_USER_CONTACT}}" >> .env
+          echo "SMTP_USER_DEVIS=${{secrets.SMTP_USER_DEVIS}}" >> .env
           echo "SMTP_PASS=${{secrets.SMTP_PASS}}" >> .env
           echo "SMTP_SECURE=true" >> .env
-          echo "SMTP_FROM=${{secrets.MAIL_FROM}}" >> .env
           echo "APP_NAME=${{secrets.APP_NAME}}" >> .env
           
           echo "VITE_SUPPORT_EMAIL=${{secrets.SUPPORT_EMAIL}}" >> .env
@@ -75,6 +75,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    env:
+      ALWAYSDATA_TOKEN: ${{ secrets.ALWAYSDATA_TOKEN }}
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v4
@@ -88,10 +90,10 @@ jobs:
           
           echo "SMTP_HOST=${{secrets.SMTP_HOST}}" >> build/.env
           echo "SMTP_PORT=465" >> build/.env
-          echo "SMTP_USER=${{secrets.SMTP_USER}}" >> build/.env
+          echo "SMTP_USER_CONTACT=${{secrets.SMTP_USER_CONTACT}}" >> build/.env
+          echo "SMTP_USER_DEVIS=${{secrets.SMTP_USER_DEVIS}}" >> build/.env
           echo "SMTP_PASS=${{secrets.SMTP_PASS}}" >> build/.env
           echo "SMTP_SECURE=true" >> build/.env
-          echo "SMTP_FROM=${{secrets.MAIL_FROM}}" >> build/.env
           echo "APP_NAME=${{secrets.APP_NAME}}" >> build/.env
           
           echo "VITE_SUPPORT_EMAIL=${{secrets.SUPPORT_EMAIL}}" >> build/.env
@@ -138,6 +140,7 @@ jobs:
             echo "Deployed to ${{ secrets.REMOTE_PATH }}"
 
       - name: restart application
+        if: ${{ env.ALWAYSDATA_TOKEN != '' }}
         run: |
           err=$(curl -X POST --basic --user "${{secrets.ALWAYSDATA_TOKEN}} account=${{secrets.ALWAYSDATA_USER}}:" https://api.alwaysdata.com/v1/site/${{secrets.ALWAYSDATA_SITE_ID}}/restart/ &>2);
           if [[ "${err}" -eq "" ]]; then 
