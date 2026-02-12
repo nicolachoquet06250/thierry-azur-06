@@ -111,7 +111,14 @@ onMounted(async () => {
       // Nettoyer les anciens marqueurs si nécessaire (optionnel pour l'instant car l'initialisation suffit)
       citiesList.forEach(city => {
         var icon = leaflet.icon({
-            iconUrl: '/marker-icon-x2.png'
+            iconUrl: '/marker-icon-x2.png',
+            shadowUrl: '/marker-shadow.png',
+
+            iconSize:     [25, 38], // size of the icon
+            shadowSize:   [50, 64], // size of the shadow
+            iconAnchor:   [5, 45], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
         });
 
         const coords = city.lat && city.lng ? { lat: city.lat, lng: city.lng } : null
